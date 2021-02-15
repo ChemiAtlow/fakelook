@@ -9,7 +9,8 @@
         "build": "lerna run build"
     },
     "devDependencies": {
-        "lerna": "^4.0.0"
+        "lerna": "^4.0.0",
+        "lerna-changelog": "^1.0.1"
     },
     "private": true,
     "workspaces": {
