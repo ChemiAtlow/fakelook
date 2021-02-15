@@ -1,0 +1,28 @@
+{
+    "name": "fakelook",
+    "version": "0.1.0",
+    "description": "A social network based on localized image sharing.",
+    "main": "",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start:dev": "lerna run start:dev --parallel",
+        "build": "lerna run build"
+    },
+    "devDependencies": {
+        "lerna": "^4.0.0"
+    },
+    "private": true,
+    "workspaces": {
+        "packages": [
+            "packages/*"
+        ]
+    },
+    "keywords": [
+        "Fakelook",
+        "node",
+        "Social",
+        "Network"
+    ],
+    "author": "Chemi Atlow",
+    "license": "MIT"
+}

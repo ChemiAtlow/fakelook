@@ -1,0 +1,29 @@
+{
+    "name": "@fakelook/common",
+    "version": "0.1.0",
+    "description": "The common parts for the fakelook project",
+    "author": "Chemi Atlow",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "license": "MIT",
+    "files": [
+        "dist"
+    ],
+    "scripts": {
+        "build": "tsc",
+        "test": "echo \"Error: run tests from root\" && exit 1",
+        "lint": "eslint src --ext ts",
+        "prebuild": "rimraf \"./dist\"",
+        "build:watch": "nodemon --watch src/ -e ts --exec \"npm run lint && npm run build\"",
+        "start:dev": "yarn run build:watch"
+    },
+    "devDependencies": {
+        "@types/node": "^14.14.20",
+        "@typescript-eslint/eslint-plugin": "^4.13.0",
+        "@typescript-eslint/parser": "^4.4.1",
+        "eslint": "^7.9.0",
+        "nodemon": "^2.0.4",
+        "rimraf": "^3.0.2",
+        "typescript": "^4.1.5"
+    }
+}
