@@ -6,11 +6,15 @@
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
         "start:dev": "lerna run start:dev --parallel",
+        "changelog": "set GITHUB_AUTH=0ce3dee23aeec41d8a47d13cfdbb88d968888cfa && lerna-changelog",
+        "semantic-release": "set GITHUB_TOKEN=0ce3dee23aeec41d8a47d13cfdbb88d968888cfa && lerna exec --concurrency 1 -- semantic-release -d -e semantic-release-monorepo",
         "build": "lerna run build"
     },
     "devDependencies": {
         "lerna": "^4.0.0",
-        "lerna-changelog": "^1.0.1"
+        "lerna-changelog": "^1.0.1",
+        "semantic-release": "^17.3.9",
+        "semantic-release-monorepo": "^7.0.4"
     },
     "private": true,
     "workspaces": {
@@ -25,5 +29,13 @@
         "Network"
     ],
     "author": "Chemi Atlow",
-    "license": "MIT"
+    "license": "MIT",
+    "homepage": "https://github.com/ChemiAtlow/fakelook#readme",
+    "bugs": {
+        "url": "https://github.com/ChemiAtlow/fakelook/issues"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/ChemiAtlow/fakelook.git"
+    }
 }

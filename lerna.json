@@ -1,14 +1,22 @@
 {
-  "packages": [
-    "packages/*"
-  ],
-  "version": "independent",
-  "npmClient": "yarn",
-  "useWorkspaces": true,
-  "command": {
-    "version": {
-      "message": "chore(release): publish %s",
-      "allowBranch": "master"
+    "packages": ["packages/*"],
+    "version": "independent",
+    "npmClient": "yarn",
+    "useWorkspaces": true,
+    "command": {
+        "version": {
+            "message": "chore(release): publish %s",
+            "allowBranch": "master"
+        }
+    },
+    "changelog": {
+        "repo": "ChemiAtlow/fakelook",
+        "labels": {
+            "feature": ":rocket: New Features",
+            "enhancement": ":eyes: Enhancements",
+            "bug": ":bug: Bug Fix",
+            "documentation": ":memo: Documentation"
+        },
+        "cacheDir": ".changelog"
     }
-  }
 }
