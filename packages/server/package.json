@@ -1,6 +1,6 @@
 {
     "name": "@fakelook/server",
-    "version": "0.1.1",
+    "version": "0.1.0",
     "description": "The common parts for the fakelook project",
     "author": "Chemi Atlow",
     "main": "dist/index.js",
