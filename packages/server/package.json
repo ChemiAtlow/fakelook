@@ -10,12 +10,12 @@
         "dist"
     ],
     "scripts": {
-        "build": "tsc",
+        "build": "tsc -b",
         "test": "echo \"Error: run tests from root\" && exit 1",
         "lint": "eslint src --ext ts",
         "execute": "node --inspect ./dist/app",
         "prebuild": "rimraf \"./dist\"",
-        "build:watch": "nodemon --watch src/ -e ts --exec \"npm run lint && npm run build && npm run execute\"",
+        "build:watch": "nodemon --watch src/ -e ts --exec \"yarn lint && yarn build && yarn execute\"",
         "start:dev": "yarn run build:watch"
     },
     "devDependencies": {
