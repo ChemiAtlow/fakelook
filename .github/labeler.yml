@@ -3,10 +3,10 @@ workflows:
 repo:
     - ./*
 client:
-    - client/**/*
+    - packages/client/**/*
 common:
-    - common/**/*
+    - packages/common/**/*
 server:
-    - server/**/*
+    - packages/server/**/*
 documentation:
     - "**/*.md"
