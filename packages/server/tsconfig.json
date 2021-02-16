@@ -14,7 +14,7 @@
         "esModuleInterop": true,
         "forceConsistentCasingInFileNames": true,
         "experimentalDecorators": true,
-        "declaration": true
+        "declaration": false
     },
     "exclude": ["node_modules", "dist"]
 }
