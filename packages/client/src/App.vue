@@ -1,30 +1,98 @@
 <template>
-  <div id="nav">
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </div>
-  <router-view/>
+    <nav-bar />
+    <div class="page">
+        <template v-if="error">
+            {{ error }}
+        </template>
+        <router-view v-else v-slot="{ Component, route }">
+            <transition
+                :name="route.meta.transitionName || 'slide-left'"
+                mode="out-in"
+                :duration="300"
+                :key="route.path"
+            >
+                <suspense timeout="0">
+                    <template #default>
+                        <div>
+                            <component :is="Component" :key="route.path" />
+                        </div>
+                    </template>
+                    <template #fallback>
+                        <app-loader />
+                    </template>
+                </suspense>
+            </transition>
+        </router-view>
+    </div>
 </template>
 
+<script lang="ts">
+import { defineComponent, onErrorCaptured, ref } from "vue";
+import NavBar from "@/components/NavBar/index.vue";
+
+const component = defineComponent({
+    name: "App",
+    components: { NavBar },
+    setup() {
+        const error = ref<Error>();
+        onErrorCaptured(e => {
+            error.value = e as Error;
+            return true;
+        });
+        return { error };
+    }
+});
+
+export default component;
+</script>
+
 <style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+* {
+    box-sizing: border-box;
 }
 
-#nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
+::-webkit-scrollbar {
+    width: 0.4rem;
+    &-track {
+        background: $primary;
     }
-  }
+    &-thumb {
+        background: $darker-blue;
+        background: $button-bg;
+        &:hover {
+            background: $dark-blue;
+        }
+    }
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden;
+}
+body {
+    margin: 0;
+    font-family: "Assistant", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background-color: $light-gray;
+    & > #app {
+        height: 100%;
+        display: grid;
+        grid-template-rows: $header-height 1fr;
+        text-align: center;
+        & > .page {
+            position: relative;
+            overflow-y: auto;
+            overflow-x: hidden;
+            height: 100%;
+            input,
+            textarea {
+                font-family: "Assistant", sans-serif;
+            }
+        }
+    }
 }
 </style>
