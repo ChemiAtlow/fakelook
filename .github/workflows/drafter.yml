@@ -1,0 +1,116 @@
+name: Release Drafter
+
+on:
+    pull_request:
+        types: [closed]
+
+jobs:
+    create_update_drafter:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Get user, title, PR number and labels
+              run: |
+                  export title=$(echo $GITHUB_CONTEXT | jq '.event.pull_request.title' | tr -d '"' )
+                  export user=$(echo $GITHUB_CONTEXT | jq '.event.pull_request.user.login' | tr -d '"')
+                  export labels=$(echo $GITHUB_CONTEXT | jq '.event.pull_request.labels[].name' | tr -d '"'| tr '\r\n' ' ' )
+                  export number=$(echo $GITHUB_CONTEXT | jq '.event.pull_request.number' | tr -d '"' )
+                  echo "title=$title" >> $GITHUB_ENV
+                  echo "user=$user" >> $GITHUB_ENV
+                  echo "labels=$labels" >> $GITHUB_ENV
+                  echo "number=$number" >> $GITHUB_ENV
+              env:
+                  GITHUB_CONTEXT: ${{ toJson(github) }}
+              if: github.event.pull_request.merged == true
+            - name: Get update/create draft/s
+              run: |
+                  RELEASES=$(curl --request GET --url https://api.github.com/repos/${{ github.repository }}/releases  --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}')
+                  function get_body ()
+                  {
+                    release=$(curl --request GET --url "https://api.github.com/repos/${{ github.repository }}/releases/$1" --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}')
+                    echo $(echo $release | jq '.body' | tr -d '"' )
+                  }
+                  function merge_new_info_in_body ()
+                  {
+                    original=$1
+                    match=$2
+                    match_=$3
+                    add=$4
+                    search="${original%%$match*}"
+                    position=$([[ "$search" = "$original" ]] && echo -1 || echo "${#search}")
+                    if [[ $position -eq -1 ]]
+                    then
+                      echo "$match_$add\r\n$original"
+                    else
+                      echo "${search}${match_}${add}${original:$position+${#match_}:${#original}}"
+                    fi
+                  }
+                  function update_body ()
+                  {
+                    text=$2
+                    text_to_add="- $title @$user (#$number)\r\n"
+                    for label in $3
+                    do
+                      if [ $label != $4 ]
+                      then
+                        if [ $label == "fix" ]
+                        then
+                          text=$(merge_new_info_in_body "$text" "## 🐛 Fixes\\\r\\\n\\\r\\\n" "## 🐛 Fixes\r\n\r\n" "$text_to_add")
+                        fi
+                        if [ $label == "feature" ]
+                        then
+                          text=$(merge_new_info_in_body "$text" "## 🚀 Features\\\r\\\n\\\r\\\n" "## 🚀 Features\r\n\r\n" "$text_to_add")
+                        fi
+                        if [ $label == "maintenance" ]
+                        then
+                          text=$(merge_new_info_in_body "$text" "## 🧹 Maintenance\\\r\\\n\\\r\\\n" "## 🧹 Maintenance\r\n\r\n" "$text_to_add")
+                        fi
+                      fi
+                    done
+                    data="{\"body\": \"${text}\"}"
+                    curl --request PATCH --url "https://api.github.com/repos/${{ github.repository }}/releases/$1" -H "Content-Type: application/json" -d "$data" --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}'
+                  }
+                  function create_new_draft ()
+                  {
+                    draft_name=$1
+                    new_body=""
+                    text_to_add="- $title @$user (#$number)\r\n"
+                    if [[ $labels == *"fix"* ]]; then new_body="$new_body\r\n## 🐛 Fixes\r\n\r\n$text_to_add" ; fi
+                    if [[ $labels == *"feature"* ]]; then new_body="$new_body\r\n## 🚀 Features\r\n\r\n$text_to_add" ; fi
+                    if [[ $labels == *"maintenance"* ]]; then new_body="$new_body\r\n## 🧹 Maintenance\r\n\r\n$text_to_add" ; fi
+                    new_data="{\"tag_name\": \"$draft_name\",  \"target_commitish\": \"master\", \"name\": \"$draft_name\", \"body\": \"$new_body\", \"draft\": true, \"prerelease\": false }"
+                    curl --request POST --url "https://api.github.com/repos/${{ github.repository }}/releases" -H "Content-Type: application/json" -d "$new_data" --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}'
+                  }
+                  common_release_id=$(echo $RELEASES | jq '.[] | select(.["name"] | contains ("common-draft")) | .id')
+                  client_release_id=$(echo $RELEASES | jq '.[] | select(.["name"] | contains ("client-draft")) | .id')
+                  server_release_id=$(echo $RELEASES | jq '.[] | select(.["name"] | contains ("server-draft")) | .id')
+                  if [[ $labels == *"common"* ]]
+                  then
+                    if [ $common_release_id != "" ]
+                    then
+                      body=$(get_body $common_release_id)
+                      echo $(update_body $common_release_id "$body" "$labels" "common")
+                    else
+                      echo $(create_new_draft "common-draft"  "common" $labels)
+                    fi
+                  fi
+                  if [[ $labels == *"client"* ]]
+                  then
+                    if [ $client_release_id != "" ]
+                    then
+                      body=$(get_body $client_release_id)
+                      echo $(update_body $client_release_id "$body" "$labels" "client")
+                    else
+                      echo $(create_new_draft "client-draft"  "client" $labels)
+                    fi
+                  fi
+                  if [[ $labels == *"server"* ]]
+                  then
+                    if [ $server_release_id != "" ]
+                    then
+                      body=$(get_body $server_release_id)
+                      echo $(update_body $server_release_id "$body" "$labels" "server")
+                    else
+                      echo $(create_new_draft "server-draft"  "server" $labels)
+                    fi
+                  fi
+              if: github.event.pull_request.merged == true
