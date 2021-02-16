@@ -6,6 +6,7 @@
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
         "start:dev": "lerna run start:dev --parallel",
+        "start": "node scripts/start",
         "build": "lerna run build"
     },
     "devDependencies": {
