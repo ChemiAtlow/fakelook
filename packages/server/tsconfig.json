@@ -14,7 +14,7 @@
         "esModuleInterop": true,
         "forceConsistentCasingInFileNames": true,
         "experimentalDecorators": true,
-        "declaration": true
     },
+    "references": [{ "path": "../common/" }],
     "exclude": ["node_modules", "dist"]
 }
