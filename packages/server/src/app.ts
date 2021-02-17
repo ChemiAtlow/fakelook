@@ -35,5 +35,5 @@ app.use(errorMiddleware);
 const { serverDomain, serverPort } = constants.URLS;
 
 app.listen(serverPort, () =>
-    appLoggerService.debug(`YahalomTests server is running at ${serverDomain}:${serverPort}`)
+    appLoggerService.debug(`Fakelook server is running at ${serverDomain}:${serverPort}`)
 );
