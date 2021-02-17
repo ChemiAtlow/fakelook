@@ -1,26 +1,26 @@
 <template>
     <div>
-        {{ data }}
+        <FormField label="Username" v-model="username" search />
     </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref } from "vue";
-async function fetchData() {  
-    return new Promise<string>((resolve) => {
-        fetch(`https://disease.sh/v3/covid-19/countries/?yesterday=true&strict=true`).then(res => {
-            setTimeout(async () => resolve(await res.json()), 2000);
-        });
+import { FormField } from "@/components/Forms";
+async function fetchData() {
+    return new Promise<void>(resolve => {
+        setTimeout(resolve, 2000);
     });
 }
 const component = defineComponent({
     name: "Login",
+    components: { FormField },
     async setup() {
-        console.log("start fetch!")
-        const data = ref<string>();
-        data.value = await fetchData();
-        console.log("done")
-        return { data };
+        const username = ref("");
+        console.log("start fetch!");
+        await fetchData();
+        console.log("done");
+        return { username };
     }
 });
 
