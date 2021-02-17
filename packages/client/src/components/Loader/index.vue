@@ -25,7 +25,7 @@ export default component;
     justify-content: center;
     align-items: center;
     }
-    span.loader__ball {
+    &__ball {
       display: inline-block;
       margin: auto 0.5rem;
       height: 1.5rem;
