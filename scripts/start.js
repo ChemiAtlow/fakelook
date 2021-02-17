@@ -45,4 +45,4 @@ if (requestedProject === server) {
     console.log("Starting Fakelook Server");
     commandsArr.push(commands.back);
 }
-return concurrently(commandsArr, { prefix: "[@facelook/{name}:{pid}]" })
+return concurrently(commandsArr, { prefix: "[@fakelook/{name}:{pid}]" })
