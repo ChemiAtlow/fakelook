@@ -1,11 +1,14 @@
 <template>
-    <div>
-        <FormField label="Username" v-model="username" search />
-    </div>
+    <Container>
+        <h1>Login</h1>
+        <FormField label="Username" v-model="username" />
+        <FormField label="Password" v-model="username" />
+    </Container>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref } from "vue";
+import { Container } from "@/components/Layout";
 import { FormField } from "@/components/Forms";
 async function fetchData() {
     return new Promise<void>(resolve => {
@@ -14,7 +17,7 @@ async function fetchData() {
 }
 const component = defineComponent({
     name: "Login",
-    components: { FormField },
+    components: { Container, FormField },
     async setup() {
         const username = ref("");
         console.log("start fetch!");
