@@ -26,22 +26,22 @@
                 <Icon icon="search" />
             </div>
         </label>
-        <p className="form-field__error" v-if="!blockErrors">{{error}}</p>
+        <p className="form-field__error" v-if="!blockErrors">{{ error }}</p>
     </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import Icon from "@/components/Icon/index.vue";
+import { Icon } from "@/components/Icon";
 
 const component = defineComponent({
     name: "FormField",
     components: { Icon },
-    emits: ['update:modelValue'],
+    emits: ["update:modelValue"],
     props: {
         modelValue: {
             type: String,
-            required: true,
+            required: true
         },
         type: {
             type: String as () => "text" | "password" | "number" | "textarea",
@@ -128,7 +128,8 @@ $top-padding: 18px;
             &:placeholder-shown ~ .form-field__control-label {
                 @include label-inactive();
             }
-            &:focus, &:-webkit-autofill {
+            &:focus,
+            &:-webkit-autofill {
                 ~ .form-field__control-label {
                     color: $primary;
                     @include label-active();
