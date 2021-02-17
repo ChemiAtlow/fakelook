@@ -82,6 +82,7 @@ node_modules/
 out
 dist
 tsconfig.build.tsbuildinfo
+tsconfig.tsbuildinfo
 
 # misc
 .DS_Store
