@@ -6,14 +6,14 @@
             <FormField label="Password" v-model="password" type="password" />
             <Button>Login</Button>
         </form>
-        <div>
+        <div class="btn__wrapper">
             <Button varaiety="secondary">Forgot password?</Button>
             <Button varaiety="secondary">Don't have an account?</Button>
         </div>
-        <div>
+        <div class="btn__wrapper">
             <Button color="gray" icon="facebook">Login with Facebook</Button>
         </div>
-        <div>
+        <div class="btn__wrapper">
             <Button color="gray" icon="google">Login with Google</Button>
         </div>
     </Container>
@@ -37,4 +37,8 @@ const component = defineComponent({
 export default component;
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.btn__wrapper {
+    margin: 0.5rem 0;
+}
+</style>
