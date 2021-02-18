@@ -6,6 +6,7 @@
                 class="form-field__control-input"
                 placeholder=" "
                 required
+                v-bind="$attrs"
                 :value="modelValue"
                 @input="$emit('update:modelValue', $event.target.value)"
             />
@@ -14,6 +15,7 @@
                 class="form-field__control-input"
                 placeholder=" "
                 required
+                v-bind="$attrs"
                 :value="modelValue"
                 @input="$emit('update:modelValue', $event.target.value)"
                 :type="type"
@@ -56,9 +58,6 @@ const component = defineComponent({
         blockErrors: { type: Boolean },
         search: { type: Boolean }
     },
-    setup(props, { attrs }) {
-        console.log(attrs);
-    }
 });
 
 export default component;
