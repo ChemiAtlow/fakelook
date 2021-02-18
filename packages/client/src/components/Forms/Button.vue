@@ -1,14 +1,20 @@
 <template>
     <button
         v-bind="$attrs"
-            class="app-button"
-            :class="{ [color||'']: color, [varaiety||'']: varaiety }">
-            <Icon v-if="icon" :icon="icon" />
-            <slot />
-        </button>
+        class="app-button"
+        :class="{
+            [color || '']: color,
+            [varaiety || '']: varaiety,
+            has__icon: icon
+        }"
+    >
+        <Icon v-if="icon" :icon="icon" :color="darkGray" />
+        <slot />
+    </button>
 </template>
 
 <script lang="ts">
+import styles from "@/utils/_exportVars.scss";
 import { defineComponent } from "vue";
 import { Icon, ICONS } from "../Icon";
 
@@ -19,14 +25,22 @@ const component = defineComponent({
         color: String as () => "error" | "gray",
         varaiety: String as () => "small" | "large" | "secondary",
         icon: String as () => keyof typeof ICONS
+    },
+    setup() {
+        return { darkGray: styles.darkGray }
     }
-})
+});
 
 export default component;
 </script>
 
 <style lang="scss" scoped>
-@mixin button($primaryBgColor, $labelColor: $light, $hoverColor: $primary, $borderColor: $primary) {
+@mixin button(
+    $primaryBgColor,
+    $labelColor: $light,
+    $hoverColor: $primary,
+    $borderColor: $primary
+) {
     @extend %app-button;
 
     background: $primaryBgColor;
@@ -40,12 +54,17 @@ export default component;
         color: $borderColor;
         border: 1px solid $borderColor;
     }
-    &:hover, &:focus {
+    &.has__icon {
+        width: 90%;
+        max-width: 22rem;
+        display: inline-grid;
+        grid-template-columns: 1rem 1fr;
+    }
+    &:hover,
+    &:focus {
         box-shadow: 0 0.3rem 1rem rgba($hoverColor, 0.5);
         border-color: transparent;
-        // filter: drop-shadow(0 0 3px $hoverColor);
     }
-
 }
 
 @mixin button-variety($variety, $colors...) {
@@ -93,7 +112,7 @@ export default component;
 
 .app-button {
     @include button($button-bg);
-    @include button-variety('error', $warn-bg, $light, $red, $red);
-    @include button-variety('gray', rgba(216, 218, 229, 1), rgba(0, 0, 0, 0.72), #1b2331, #1b2331);
+    @include button-variety("error", $warn-bg, $light, $red, $red);
+    @include button-variety("gray", $gray-bg, $dark, $dark-gray, $dark-gray);
 }
 </style>
