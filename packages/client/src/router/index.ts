@@ -16,6 +16,10 @@ const routes: Array<RouteRecordRaw> = [
         name: "Auth",
         component: () => import(/* webpackChunkName: "auth-pages" */ "../views/Auth.vue"),
     },
+    {
+        path: "/:catchAll(.*)",
+        component: () => import(/* webpackChunkName: "error-pages" */ "../views/e404.vue"),
+    },
 ];
 
 const router = createRouter({
