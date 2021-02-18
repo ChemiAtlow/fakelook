@@ -1,36 +1,52 @@
 <template>
     <Container>
         <form>
-            <h1>Login</h1>
-            <FormField label="Username" v-model="username" />
-            <FormField label="Password" v-model="password" type="password" />
+            <h1>{{ pageTitle }}</h1>
+            <FormField
+                label="Username"
+                v-model="username.value"
+                autocomplete="username"
+            />
+            <FormField
+                label="Password"
+                v-model="password.value"
+                autocomplete="current-password"
+                type="password"
+            />
             <Button>Login</Button>
         </form>
         <div class="btn__wrapper">
-            <Button varaiety="secondary">Forgot password?</Button>
-            <Button varaiety="secondary">Don't have an account?</Button>
+            <Button varaiety="secondary" @click="changeView('recover')" v-if="isLogin">
+                Forgot password?
+            </Button>
+            <Button varaiety="secondary" @click="() => changeView(isLogin ? 'signup' : 'login')">
+                {{isLogin ? "Don't have an account?" : "Go to login page!" }}
+            </Button>
         </div>
-        <div class="btn__wrapper">
-            <Button color="gray" icon="facebook">Login with Facebook</Button>
-        </div>
-        <div class="btn__wrapper">
-            <Button color="gray" icon="google">Login with Google</Button>
-        </div>
+        <template v-if="isLogin">
+            <div class="btn__wrapper">
+                <Button color="gray" icon="facebook"
+                    >Login with Facebook</Button
+                >
+            </div>
+            <div class="btn__wrapper">
+                <Button color="gray" icon="google">Login with Google</Button>
+            </div>
+        </template>
     </Container>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "vue";
+import { defineComponent } from "vue";
 import { Container } from "@/components/Layout";
 import { FormField, Button } from "@/components/Forms";
+import { username, password, isLogin, pageTitle, changeView } from "@/compositions/auth";
 
 const component = defineComponent({
     name: "Login",
     components: { Container, FormField, Button },
-    async setup() {
-        const username = ref("");
-        const password = ref("");
-        return { username, password };
+    setup() {
+        return { username, password, changeView, isLogin, pageTitle };
     }
 });
 
