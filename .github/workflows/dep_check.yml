@@ -1,9 +1,9 @@
-name: Greetings
+name: Dependency checker
 
 on: [pull_request]
 
 jobs:
-  greeting:
+  dependency_check:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout	
@@ -14,6 +14,5 @@ jobs:
           check-dependencies: true
           include-main-package-json: true
           only-warn: true
-          impact-analysis: true
         env:
            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
