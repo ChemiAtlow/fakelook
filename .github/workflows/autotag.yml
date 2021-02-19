@@ -14,7 +14,7 @@ jobs:
       - run: echo $GITHUB_WORKSPACE
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_WORKSPACE: ${{  }}
+          GITHUB_WORKSPACE: ${{ github.workspace }}
 #         with:
 #           allow_unmatched_draft_tag: 'false'  # default value = 'true'
 #           allow_release_name_update: 'true'
