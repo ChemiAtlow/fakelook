@@ -1,6 +1,5 @@
 name: Create Tag
-on:
-  pull_request
+on: [pull_request]
 #   push:
 #     branches: [master]
 #     paths:
@@ -10,9 +9,7 @@ jobs:
   publish_draft_release_on_version_bump:
     runs-on: ubuntu-latest
     steps:
-      # Does a checkout of your repository at the pushed commit SHA
-      - uses: actions/checkout@v1
-      # Checks for a version bump to publish an existing Draft Release
+#       - uses: actions/checkout@v1
 #       - uses: JamesMGreene/node-draft-releaser@v1
       - run: echo $GITHUB_WORKSPACE
         env:
