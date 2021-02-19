@@ -1,0 +1,26 @@
+name: Create Tag
+on:
+  pull_request
+#   push:
+#     branches: [master]
+#     paths:
+#       - /packages/client/package.json
+
+jobs:
+  publish_draft_release_on_version_bump:
+    runs-on: ubuntu-latest
+    steps:
+      # Does a checkout of your repository at the pushed commit SHA
+      - uses: actions/checkout@v1
+      # Checks for a version bump to publish an existing Draft Release
+#       - uses: JamesMGreene/node-draft-releaser@v1
+      - run: echo $GITHUB_WORKSPACE
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_WORKSPACE: ${{  }}
+#         with:
+#           allow_unmatched_draft_tag: 'false'  # default value = 'true'
+#           allow_release_name_update: 'true'
+#       - run: echo "Released at $RELEASE_URL"
+#         env:
+#           RELEASE_URL: ${{ steps.github_release.outputs.release_url }}
