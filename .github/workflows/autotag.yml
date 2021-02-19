@@ -1,15 +1,16 @@
 name: Create Tag
-on: [pull_request]
+on: 
+  pull_request:
 #   push:
 #     branches: [master]
-#     paths:
-#       - /packages/client/package.json
+    paths:
+      - /packages/client/package.json
 
 jobs:
   publish_draft_release_on_version_bump:
     runs-on: ubuntu-latest
     steps:
-#       - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
 #       - uses: JamesMGreene/node-draft-releaser@v1
       - run: echo $GITHUB_WORKSPACE
         env:
