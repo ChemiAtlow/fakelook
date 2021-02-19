@@ -1,12 +1,13 @@
-import { Guid } from "../classes";
+import { guid } from "../classes";
+import { User } from "./User";
 
 export interface Post {
-    Id: Guid;
-    UserId: Guid;
-    Time: Date;
-    Scope: "public" | "friends";
-    Image: String;
-    Longitude: Number;
-    Latitude: Number;
-    Hashtags: String[];
+    id: guid;
+    user: User;
+    time: number;
+    scope: "public" | "friends";
+    image: string;
+    longitude: number;
+    latitude: number;
+    hashtags: string[];
 }

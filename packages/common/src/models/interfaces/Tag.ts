@@ -1,6 +1,7 @@
-import { Guid } from "../classes";
+import { User } from "./User";
+import { Post } from "./Post";
 
 export interface Tag {
-    PostId: Guid;
-    UserId: Guid;
+    post: Post;
+    user: User;
 }

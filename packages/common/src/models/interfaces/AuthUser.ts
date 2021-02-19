@@ -1,9 +1,9 @@
-import { Guid } from "../classes";
+import { guid } from "../classes";
 
 export interface AuthUser {
-    Id: Guid;
-    Username: String;
-    Password: String;
-    Email: String;
-    Role: "user" | "admin";
+    id: guid;
+    username: string;
+    password: string;
+    email: string;
+    role: "user" | "admin";
 }

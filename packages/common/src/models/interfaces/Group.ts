@@ -1,7 +1,7 @@
-import { Guid } from "../classes";
+import { User } from "./User";
 
 export interface Group {
-    Name: String;
-    OwnerId: Guid;
-    UsersIds: Guid[];
+    name: string;
+    owner: User;
+    users: User[];
 }

@@ -1,8 +1,8 @@
-import { Guid } from "../classes";
+import { guid } from "../classes";
 
 export interface FriendRequest {
-    Id: Guid;
-    SenderId: Guid;
-    ReceiverId: Guid;
-    State: "pending" | "accepted" | "denied" | "canceled";
+    id: guid;
+    senderId: guid;
+    receiverId: guid;
+    state: "pending" | "accepted" | "denied" | "canceled";
 }
