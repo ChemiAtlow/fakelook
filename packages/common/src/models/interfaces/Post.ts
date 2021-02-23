@@ -7,6 +7,7 @@ export interface Post {
     time: number;
     scope: "public" | "friends";
     image: string;
+    text: string;
     longitude: number;
     latitude: number;
     hashtags: string[];
