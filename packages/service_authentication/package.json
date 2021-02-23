@@ -16,7 +16,7 @@
         "execute": "node --inspect ./dist/app",
         "prebuild": "rimraf \"./dist\"",
         "build:watch": "nodemon --watch src/ -e ts --exec \"npm run lint && npm run build && npm run execute\"",
-        "start:dev": "npm start build:watch"
+        "start:dev": "npm run build:watch"
     },
     "dependencies": {
         "@fakelook/common": "^0.1.0",
