@@ -58,6 +58,10 @@
       </div>
     </template>
   </Container>
+  <teleport v-if="isLogin" to="body">
+    <script src="https://apis.google.com/js/client:platform.js?onload=start">
+    </script>
+  </teleport>
 </template>
 
 <script lang="ts">
