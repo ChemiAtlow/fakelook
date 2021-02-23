@@ -1,7 +1,5 @@
-import { guid } from "../classes";
-
 export interface AuthUser {
-    id: guid;
+    id: number;
     username: string;
     password: string;
     email: string;
