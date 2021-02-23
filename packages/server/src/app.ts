@@ -5,19 +5,18 @@ import compression from "compression";
 import morgan from "morgan";
 import { json } from "body-parser";
 import { appLoggerService } from "./services";
-import { patchRouterParamForAsyncHandling } from "./utils";
 // import { questionsRoutes, authRoutes, testRoutes, reportRoutes, examRoutes } from "./routes";
-import { constants } from "@fakelook/common";
-import { assignId, errorMiddleware, notFoundMiddleware } from "./middleware";
+import { constants, middleware, utils } from "@fakelook/common";
+const { requestIdAssignMiddleware, errorMiddleware, notFoundMiddleware } = middleware;
 
 morgan.token("id", function getId(req: Request) {
     return req.id;
 });
 
-patchRouterParamForAsyncHandling();
+utils.patchRouterParamForAsyncHandling();
 const app = express();
 
-app.use(assignId);
+app.use(requestIdAssignMiddleware(appLoggerService));
 app.use(helmet());
 app.use(cors());
 app.use(
@@ -29,8 +28,8 @@ app.use(json());
 app.use(compression());
 
 // app.use("/auth", authRoutes);
-app.use("*", notFoundMiddleware);
-app.use(errorMiddleware);
+app.use("*", notFoundMiddleware(appLoggerService));
+app.use(errorMiddleware(appLoggerService));
 
 const { serverDomain, serverPort } = constants.URLS;
 
