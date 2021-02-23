@@ -5,9 +5,8 @@ import compression from "compression";
 import morgan from "morgan";
 import { json } from "body-parser";
 import { appLoggerService } from "./services";
-import { utils } from "@fakelook/common";
-import { constants } from "@fakelook/common";
-import { assignId, errorMiddleware, notFoundMiddleware } from "./middleware";
+import { constants, middleware, utils } from "@fakelook/common";
+const { requestIdAssignMiddleware, errorMiddleware, notFoundMiddleware } = middleware;
 
 morgan.token("id", function getId(req: Request) {
     return req.id;
@@ -16,7 +15,7 @@ morgan.token("id", function getId(req: Request) {
 utils.patchRouterParamForAsyncHandling();
 const app = express();
 
-app.use(assignId);
+app.use(requestIdAssignMiddleware(appLoggerService));
 app.use(helmet());
 app.use(cors());
 app.use(
@@ -28,11 +27,11 @@ app.use(json());
 app.use(compression());
 
 // app.use("/auth", authRoutes);
-app.use("*", notFoundMiddleware);
-app.use(errorMiddleware);
+app.use("*", notFoundMiddleware(appLoggerService));
+app.use(errorMiddleware(appLoggerService));
 
 const { authDomain, authPort } = constants.URLS;
 
 app.listen(authPort, () =>
-    appLoggerService.debug(`Fakelook server is running at ${authDomain}:${authPort}`)
+    appLoggerService.debug(`Fakelook authentication server is running at ${authDomain}:${authPort}`)
 );
