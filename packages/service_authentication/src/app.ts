@@ -31,6 +31,9 @@ app.use(json());
 app.use(compression());
 
 // app.use("/auth", authRoutes);
+
+//app.use("/googleauth", ) i have no idea how to access the service...
+
 app.use("*", notFoundMiddleware(appLoggerService));
 app.use(errorMiddleware(appLoggerService));
 
