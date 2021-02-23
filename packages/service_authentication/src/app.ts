@@ -5,6 +5,7 @@ import compression from "compression";
 import morgan from "morgan";
 import { json } from "body-parser";
 import { appLoggerService } from "./services";
+import { googleRouter } from "./routes";
 import { constants, middleware, utils } from "@fakelook/common";
 const { requestIdAssignMiddleware, errorMiddleware, notFoundMiddleware } = middleware;
 
@@ -32,7 +33,7 @@ app.use(compression());
 
 // app.use("/auth", authRoutes);
 
-//app.use("/googleauth", ) i have no idea how to access the service...
+app.use("/google", googleRouter);
 
 app.use("*", notFoundMiddleware(appLoggerService));
 app.use(errorMiddleware(appLoggerService));
