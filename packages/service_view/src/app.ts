@@ -36,5 +36,5 @@ app.use("*", notFoundMiddleware(appLoggerService));
 app.use(errorMiddleware(appLoggerService));
 
 app.listen(viewPort, () =>
-    appLoggerService.debug(`Fakelook server is running at ${viewDomain}:${viewPort}`)
+    appLoggerService.debug(`Fakelook view server is running at ${viewDomain}:${viewPort}`)
 );
