@@ -8,5 +8,6 @@ common:
     - packages/common/**/*
 server:
     - packages/server/**/*
+    - packages/service_*/**/*
 documentation:
     - "**/*.md"
