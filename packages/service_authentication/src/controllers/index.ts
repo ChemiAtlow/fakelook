@@ -1,0 +1,1 @@
+export * as googleController from './google.controller';
