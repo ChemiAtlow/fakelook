@@ -15,9 +15,13 @@ morgan.token("id", function getId(req: Request) {
 utils.patchRouterParamForAsyncHandling();
 const app = express();
 
+const { authDomain, authPort, serverDomain, serverPort } = constants.URLS;
+
 app.use(requestIdAssignMiddleware(appLoggerService));
 app.use(helmet());
-app.use(cors());
+app.use(cors({
+    origin: `${serverDomain}:${serverPort}`
+}));
 app.use(
     morgan(":id :method :url :status :response-time ms - :res[content-length]", {
         stream: appLoggerService.logStream,
@@ -29,8 +33,6 @@ app.use(compression());
 // app.use("/auth", authRoutes);
 app.use("*", notFoundMiddleware(appLoggerService));
 app.use(errorMiddleware(appLoggerService));
-
-const { authDomain, authPort } = constants.URLS;
 
 app.listen(authPort, () =>
     appLoggerService.debug(`Fakelook authentication server is running at ${authDomain}:${authPort}`)
