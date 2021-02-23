@@ -4,9 +4,14 @@ import helmet from "helmet";
 import compression from "compression";
 import morgan from "morgan";
 import { json } from "body-parser";
+import { config as configEnv } from "dotenv";
 import { appLoggerService } from "./services";
 import { constants, middleware, utils } from "@fakelook/common";
 const { requestIdAssignMiddleware, errorMiddleware, notFoundMiddleware } = middleware;
+
+if (process.env.NODE_ENV !== "PRODUCTION") {
+    configEnv();
+}
 
 morgan.token("id", function getId(req: Request) {
     return req.id;
