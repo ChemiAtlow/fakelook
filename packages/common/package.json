@@ -13,9 +13,9 @@
         "build": "tsc",
         "test": "echo \"Error: run tests from root\" && exit 1",
         "lint": "eslint src --ext ts",
-        "prebuild": "rimraf \"./dist\"",
-        "build:watch": "nodemon --watch src/ -e ts --exec \"yarn lint && yarn build\"",
-        "start:dev": "yarn run build:watch"
+        "prebuild": "rimraf \"./dist\" && rimraf \"tsconfig.tsbuildinfo\"",
+        "build:watch": "nodemon --watch src/ -e ts --exec \"npm run lint && npm run build\"",
+        "start:dev": "npm run build:watch"
     },
     "devDependencies": {
         "@types/node": "^14.14.20",
