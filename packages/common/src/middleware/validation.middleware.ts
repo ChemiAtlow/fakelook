@@ -5,9 +5,9 @@ import { BadRequestError } from "../errors";
 import { classes, types } from "../models";
 
 export function validationMiddleware<T extends {}>(
+    logger: types.Logger,
     type: { new (): T },
     skipMissingProperties = false,
-    logger: types.Logger
 ) {
     return async (req: Request & { id: classes.guid }, _: Response, next: NextFunction) => {
         logger.verbose(`Attempting to validate ${type.name} for request ${req.id}`);
