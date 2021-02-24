@@ -78,7 +78,7 @@ node_modules/
 /coverage
 
 # production
-/build
+build
 out
 dist
 tsconfig.build.tsbuildinfo
