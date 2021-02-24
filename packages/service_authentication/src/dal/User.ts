@@ -1,5 +1,6 @@
 import { models } from "@fakelook/common";
 import { Optional, Model, DataTypes } from "sequelize";
+import { appLoggerService } from "../services";
 import { sequelize } from "./MySqlConnection";
 
 type UserAttributes = models.interfaces.AuthUser;
@@ -44,3 +45,17 @@ export const userModel = sequelize.define<UserInstance>("User", {
     },
 });
 userModel.sync();
+
+export const getUserByEmail = async (email: string) => {
+    appLoggerService.verbose("Attempt to find a user by his email", { email });
+    const user = await userModel.findOne({ where: { email } });
+    appLoggerService.verbose(`User was ${user ? "found" : "not found"}`, user);
+    return user;
+};
+
+export const getUserByUsername = async (username: string) => {
+    appLoggerService.verbose("Attempt to find a user by his username", { username });
+    const user = await userModel.findOne({ where: { username } });
+    appLoggerService.verbose(`User was ${user ? "found" : "not found"}`, user);
+    return user;
+};
