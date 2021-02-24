@@ -59,3 +59,17 @@ export const getUserByUsername = async (username: string) => {
     appLoggerService.verbose(`User was ${user ? "found" : "not found"}`, user);
     return user;
 };
+
+export const getUserWithResetToken = async (token: string) => {
+    appLoggerService.verbose("Attempt to find a user by his reset token", { token });
+    const user = await userModel.findOne({ where: { resetToken: token } });
+    if (user && (user.resetTokenExpiration?.getTime() || 0) < Date.now()) {
+        appLoggerService.info('User with token was found, but token is expired', { user: user.get() });
+        await user.update({
+            resetToken: null,
+            resetTokenExpiration: null,
+        });
+        return null;
+    }
+    return user;
+};
