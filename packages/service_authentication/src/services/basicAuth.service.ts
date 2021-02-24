@@ -23,14 +23,18 @@ export const signup = async ({ email, password, username }: models.classes.AuthU
     appLoggerService.verbose("User sign up completed successfully", { newUser });
 };
 
-export const login = async ({ email, username, password }: models.classes.AuthUserDto) => {
+export const login = async ({ email, username, password }: Partial<models.classes.AuthUserDto>) => {
     appLoggerService.verbose("Attempt to login a user", { email });
     if (!email && !username) {
         appLoggerService.warn("Attempt for login failed - no email/username provided");
         throw new errors.BadRequestError("Must provide one of: email/username.");
     }
+    if (!password) {
+        appLoggerService.warn("Attempt for login failed - no password provided");
+        throw new errors.BadRequestError("Must provide a password!");
+    }
     //check if user exist
-    const userFromDb = email ? await getUserByEmail(email) : await getUserByUsername(username);
+    const userFromDb = email ? await getUserByEmail(email) : await getUserByUsername(username!);
     if (!userFromDb) {
         appLoggerService.info("attempt to login user failed - no user with email/username exists", { email, username });
         throw new WrongCredentialsError();
