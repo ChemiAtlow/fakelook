@@ -4,4 +4,6 @@ export interface AuthUser {
     password: string;
     email: string;
     role: "user" | "admin";
+    resetToken?: string;
+    resetTokenExpiration?: Date;
 }
