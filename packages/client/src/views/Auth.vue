@@ -83,35 +83,15 @@ import {
 const component = defineComponent({
     name: "Auth",
     components: { Container, FormField, Button },
-    async setup() {
-        let auth2: any = {};
-        await new Promise<void>((res, rej) => {
-            const gAPIScript = document.createElement("script");
-            gAPIScript.setAttribute(
-                "src",
-                "https://apis.google.com/js/client:platform.js"
-            );
-            document.head.appendChild(gAPIScript);
-            gAPIScript.onload = () => {
-                const gapi = (window as any).gapi;
-                gapi.load("auth2", function () {
-                    auth2 = gapi.auth2.init({
-                        //eslint-disable-next-line @typescript-eslint/camelcase
-                        client_id:
-                            "77598589513-08uj972lr28be5cdcl6a2bp8frk3h94j.apps.googleusercontent.com",
-                    });
-                });
-
-                res();
-            };
-        });
-        const googleLogin = async () => {
-            try {
-                const info = await auth2.grantOfflineAccess();
-                console.log(info);
-            } catch (error) {
-                console.warn(error);
-            }
+    setup() {
+        const googleLogin = () => {
+            const clientId =
+                "77598589513-08uj972lr28be5cdcl6a2bp8frk3h94j.apps.googleusercontent.com";
+            const redirectUri = "http://localhost:4441/google/callback";
+            const scope = "profile email openid";
+            const responseType = "code";
+            const link = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${redirectUri}&mode=popup&scope=${scope}&response_type=${responseType}&access_type=offline&include_granted_scopes=true`;
+            open(link);
         };
         return {
             username,
