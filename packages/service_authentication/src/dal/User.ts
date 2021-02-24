@@ -16,6 +16,7 @@ export const userModel = sequelize.define<UserInstance>("User", {
     },
     username: {
         type: new DataTypes.STRING(10),
+        unique: true,
         allowNull: false,
     },
     password: {
@@ -25,6 +26,7 @@ export const userModel = sequelize.define<UserInstance>("User", {
     email: {
         type: DataTypes.STRING,
         allowNull: false,
+        unique: true,
     },
     role: {
         type: DataTypes.ENUM,
@@ -32,4 +34,13 @@ export const userModel = sequelize.define<UserInstance>("User", {
         allowNull: false,
         defaultValue: "user",
     },
+    resetToken: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
+    resetTokenExpiration: {
+        type: DataTypes.DATE,
+        allowNull: true,
+    },
 });
+userModel.sync();
