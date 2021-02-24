@@ -36,5 +36,5 @@ app.use("*", notFoundMiddleware(appLoggerService));
 app.use(errorMiddleware(appLoggerService));
 
 app.listen(postsPort, () =>
-    appLoggerService.debug(`Fakelook server is running at ${postsDomain}:${postsPort}`)
+    appLoggerService.debug(`Fakelook posts server is running at ${postsDomain}:${postsPort}`)
 );

@@ -1,0 +1,50 @@
+version: "3.8"
+
+services:
+    mysql:
+        image: mysql
+        restart: always
+        environment:
+            MYSQL_DATABASE: "db"
+            # So you don't have to use root, but you can if you like
+            MYSQL_USER: "fakelook_user"
+            # You can use whatever password you like
+            MYSQL_PASSWORD: "greps_hazak"
+            MYSQL_ROOT_PASSWORD: "lalala"
+        ports:
+            - 3306:3306
+        volumes:
+            - sqlData:/var/lib/mysql
+        expose:
+            - "3306"
+    mongo:
+        image: mongo
+        restart: always
+        environment:
+            MONGO_INITDB_ROOT_USERNAME: fakelook_user
+            MONGO_INITDB_ROOT_PASSWORD: greps_hazak
+        ports:
+            - 27017:27017
+        volumes: 
+            - mongoData:/data/db
+    adminer:
+        image: adminer
+        restart: always
+        environment:
+            ADMINER_DEFAULT_SERVER: mysql
+            ADMINER_PLUGINS: 'tables-filter tinymce'
+            ADMINER_DESIGN: rmsoft_blue
+        ports:
+            - 666:8080
+    mongo-express:
+        image: mongo-express
+        restart: always
+        ports:
+            - 777:8081
+        environment:
+            ME_CONFIG_MONGODB_ADMINUSERNAME: fakelook_user
+            ME_CONFIG_MONGODB_ADMINPASSWORD: greps_hazak
+
+volumes:
+    sqlData:
+    mongoData:
