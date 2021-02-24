@@ -1,1 +1,2 @@
-export { googleRouter } from './google.routes';
+export * from './google.routes';
+export * from "./basicAuth.routes";
