@@ -1,14 +1,11 @@
-import { constants } from '@fakelook/common';
 import axios from 'axios';
 import { appLoggerService, emailService } from '.';
 import { userModel } from '../dal';
 import type { GoogleUser } from '../models';
-const { authDomain, authPort } = constants.URLS;
 
-export const exchangeCodeForAccessToken = async (code: string) => {
+export const exchangeCodeForAccessToken = async (code: string, origin: string) => {
     const { GOOGLE_CLIENT_ID: clientId, GOOGLE_CLIENT_SECRET: clientSecret } = process.env;
-    const redirectURI = `${authDomain}:${authPort}/google/callback`;
-    const qs = `code=${code}&client_id=${clientId}&client_secret=${clientSecret}&redirect_uri=${redirectURI}&grant_type=authorization_code`;
+    const qs = `code=${code}&client_id=${clientId}&client_secret=${clientSecret}&redirect_uri=${origin}&grant_type=authorization_code`;
     try {
         const { data } = await axios.post(`https://oauth2.googleapis.com/token?${qs}`);
         return data.access_token;
