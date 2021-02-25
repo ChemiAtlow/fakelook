@@ -1,6 +1,7 @@
 import { constants } from '@fakelook/common';
 import axios from 'axios';
-import { appLoggerService } from '.';
+import { appLoggerService, emailService } from '.';
+import { userModel } from '../dal';
 import type { GoogleUser } from '../models';
 const { authDomain, authPort } = constants.URLS;
 
@@ -25,4 +26,15 @@ export const getUserInfo = async (accessToken: string) => {
         { headers: { authorization: `Bearer ${accessToken}` } }
     );
     return data;
+};
+
+export const createAuthUserFromGoogleUser = async (gUser: GoogleUser) => {
+    const { email, id, given_name: username }=gUser;
+    await userModel.create({
+        email,
+        username,
+        password:`GOOGLE-${id}`,
+        provider: "google"
+    });
+    await emailService.sendSignUpEmail(email);
 };
