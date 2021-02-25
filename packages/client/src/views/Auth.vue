@@ -1,5 +1,6 @@
 <template>
-    <Container>
+    <app-loader v-if="isCallback" />
+    <Container v-else>
         <form>
             <h1>{{ pageTitle }}</h1>
             <FormField
@@ -56,9 +57,7 @@
                 </Button>
             </div>
             <div class="btn__wrapper">
-                <Button color="gray" icon="google" @click="googleLogin">
-                    Login with Google
-                </Button>
+                <GoogleButton />
             </div>
         </template>
     </Container>
@@ -68,51 +67,38 @@
 import { defineComponent } from "vue";
 import { Container } from "@/components/Layout";
 import { FormField, Button } from "@/components/Forms";
+import GoogleButton from "@/components/Auth/GoogleButton.vue";
 import {
     username,
     password,
     email,
     repeatPassword,
     isLogin,
+    isCallback,
     isSignup,
     isRecover,
     pageTitle,
-    changeView,
+    changeView
 } from "@/compositions/auth";
 
 const component = defineComponent({
     name: "Auth",
-    components: { Container, FormField, Button },
-    async setup() {
-        let auth2: any = {};
-        await new Promise<void>((res, rej) => {
-            const gAPIScript = document.createElement("script");
-            gAPIScript.setAttribute(
-                "src",
-                "https://apis.google.com/js/client:platform.js"
-            );
-            document.head.appendChild(gAPIScript);
-            gAPIScript.onload = () => {
-                const gapi = (window as any).gapi;
-                gapi.load("auth2", function () {
-                    auth2 = gapi.auth2.init({
-                        //eslint-disable-next-line @typescript-eslint/camelcase
-                        client_id:
-                            "77598589513-08uj972lr28be5cdcl6a2bp8frk3h94j.apps.googleusercontent.com",
-                    });
-                });
-
-                res();
-            };
-        });
-        const googleLogin = async () => {
-            try {
-                const info = await auth2.grantOfflineAccess();
-                console.log(info);
-            } catch (error) {
-                console.warn(error);
+    components: { Container, FormField, Button, GoogleButton },
+    setup() {
+        if (isCallback.value) {
+            const queries = new URLSearchParams(window.location.search);
+            let msg: string | {key: string}[] = "";
+            if (!queries.has("code")) {
+                console.error("No code, handle this better!");
+                msg = "ERR";
+            } else {
+                msg = [...queries].map(([key,val]) => ({key, val}))
             }
-        };
+            if (window.opener) {
+                window.opener.postMessage(msg);
+                window.close();
+            }
+        }
         return {
             username,
             password,
@@ -120,12 +106,12 @@ const component = defineComponent({
             repeatPassword,
             changeView,
             isLogin,
+            isCallback,
             isSignup,
             isRecover,
-            pageTitle,
-            googleLogin,
+            pageTitle
         };
-    },
+    }
 });
 
 export default component;

@@ -12,7 +12,7 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import(/* webpackChunkName: "about" */ "../views/About.vue"),
     },
     {
-        path: "/:page(login|signup|recover|reset)/:token?",
+        path: "/:page(login|signup|recover|reset|auth_cb)/:token?",
         name: "Auth",
         component: () => import(/* webpackChunkName: "auth-pages" */ "../views/Auth.vue"),
     },
