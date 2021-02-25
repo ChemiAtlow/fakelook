@@ -84,15 +84,16 @@ import {
 const component = defineComponent({
     name: "Auth",
     components: { Container, FormField, Button, GoogleButton },
-    setup() {
+    async setup() {
         if (isCallback.value) {
             const queries = new URLSearchParams(window.location.search);
             let msg: string | {key: string}[] = "";
             if (!queries.has("code")) {
-                console.error("No code, handle this better!");
                 msg = "ERR";
             } else {
-                msg = [...queries].map(([key,val]) => ({key, val}))
+                //SEND API REQUEST WITH CODE HERE.
+                await new Promise(res => setTimeout(res, 1000 *6));
+                msg = [...queries, ["origin", location.href.split("?")[0]]].map(([key,val]) => ({key, val}))
             }
             if (window.opener) {
                 window.opener.postMessage(msg);
