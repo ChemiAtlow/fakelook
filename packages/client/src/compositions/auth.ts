@@ -74,16 +74,11 @@ export const receiveMessage = (event: MessageEvent) => {
         return;
     }
     const { data } = event;
-    // if we trust the sender and the source is our popup
-    console.log('EV', data);
     if (data === 'ERR') {
         console.error('SHOULD SHOW MODAL, ERROR!');
-    }
-    if (data.code) {
-        // get the URL params and redirect to our server to use Passport to auth/login
-        const { payload } = data;
-        const redirectUrl = `/auth/google/login${payload}`;
-        window.location.pathname = redirectUrl;
+    } else {
+        // Got the JWT - do something
+        console.log(data);
     }
 };
 export const openPopup = (url: string, name: string) => {
