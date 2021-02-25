@@ -80,6 +80,7 @@ import {
     pageTitle,
     changeView
 } from "@/compositions/auth";
+import { googleAuthService } from "@/services";
 
 const component = defineComponent({
     name: "Auth",
@@ -87,13 +88,17 @@ const component = defineComponent({
     async setup() {
         if (isCallback.value) {
             const queries = new URLSearchParams(window.location.search);
-            let msg: string | {key: string}[] = "";
-            if (!queries.has("code")) {
-                msg = "ERR";
-            } else {
-                //SEND API REQUEST WITH CODE HERE.
-                await new Promise(res => setTimeout(res, 1000 *6));
-                msg = [...queries, ["origin", location.href.split("?")[0]]].map(([key,val]) => ({key, val}))
+            let msg = "ERR";
+            if (queries.has("code")) {
+                const code = queries.get("code") || "";
+                const origin = location.href.split("?")[0];
+                try {
+                    const { data } = await googleAuthService.connect(code, origin);
+                    msg = data.jwt;
+                } catch (err) {
+                    console.warn(err);
+                    msg = "ERR";
+                }
             }
             if (window.opener) {
                 window.opener.postMessage(msg);
