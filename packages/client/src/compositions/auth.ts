@@ -68,7 +68,7 @@ export const changeView = (path: 'login' | 'signup' | 'recover') => {
 
 let windowObjectReference: Window | null = null;
 let previousUrl: string | null = null;
-export const receiveMessage = (event: any) => {
+export const receiveMessage = (event: MessageEvent) => {
     // Ensure origin is trusted.
     if (event.origin !== window.location.origin) {
         return;
