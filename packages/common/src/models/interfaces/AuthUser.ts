@@ -4,6 +4,7 @@ export interface AuthUser {
     password: string;
     email: string;
     role: "user" | "admin";
+    provider: "basic" | "google" | "facebook";
     resetToken?: string;
     resetTokenExpiration?: Date;
 }
