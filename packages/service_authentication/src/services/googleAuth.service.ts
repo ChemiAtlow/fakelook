@@ -1,24 +1,15 @@
+import { constants } from '@fakelook/common';
 import axios from 'axios';
 import { appLoggerService } from '.';
+import type { GoogleUser } from '../models';
+const { authDomain, authPort } = constants.URLS;
 
 export const exchangeCodeForAccessToken = async (code: string) => {
+    const { GOOGLE_CLIENT_ID: clientId, GOOGLE_CLIENT_SECRET: clientSecret } = process.env;
+    const redirectURI = `${authDomain}:${authPort}/google/callback`;
+    const qs = `code=${code}&client_id=${clientId}&client_secret=${clientSecret}&redirect_uri=${redirectURI}&grant_type=authorization_code`;
     try {
-        const { data } = await axios.post(
-            'https://oauth2.googleapis.com/token',
-            {},
-            {
-                params: {
-                    code,
-                    /*eslint-disable @typescript-eslint/naming-convention*/
-                    client_id:
-                        '77598589513-08uj972lr28be5cdcl6a2bp8frk3h94j.apps.googleusercontent.com',
-                    client_secret: 'mUC4gKAn2Va0gyraYPl1hUiu',
-                    redirect_uri: 'http://localhost:4441/google/callback',
-                    grant_type: 'authorization_code',
-                    /*eslint-enable @typescript-eslint/naming-convention*/
-                },
-            }
-        );
+        const { data } = await axios.post(`https://oauth2.googleapis.com/token?${qs}`);
         return data.access_token;
     } catch (error) {
         appLoggerService.error('khaki', error);
@@ -29,7 +20,7 @@ export const exchangeCodeForAccessToken = async (code: string) => {
 export const getUserInfo = async (accessToken: string) => {
     const {
         data,
-    } = await axios.get(
+    } = await axios.get<GoogleUser>(
         `https://www.googleapis.com/oauth2/v1/userinfo?access_token=${accessToken}`,
         { headers: { authorization: `Bearer ${accessToken}` } }
     );
