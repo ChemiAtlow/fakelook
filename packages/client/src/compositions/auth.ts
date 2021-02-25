@@ -69,39 +69,39 @@ export const changeView = (path: 'login' | 'signup' | 'recover') => {
 let windowObjectReference: Window | null = null;
 let previousUrl: string | null = null;
 export const receiveMessage = (event: any) => {
-    console.log('EV', event);
     // Ensure origin is trusted.
-    if (event.origin !== previousUrl) {
+    if (event.origin !== window.location.origin) {
         return;
     }
     const { data } = event;
     // if we trust the sender and the source is our popup
-    if (data.source === 'lma-login-redirect') {
+    console.log('EV', data);
+    if (data === 'ERR') {
+        console.error('SHOULD SHOW MODAL, ERROR!');
+    }
+    if (data.code) {
         // get the URL params and redirect to our server to use Passport to auth/login
         const { payload } = data;
         const redirectUrl = `/auth/google/login${payload}`;
         window.location.pathname = redirectUrl;
     }
 };
-const removeEventListenerForMsgs = () =>  window.removeEventListener('message', receiveMessage);
 export const openPopup = (url: string, name: string) => {
-    // remove any existing event listeners
-    removeEventListenerForMsgs();
-    // window features
+    window.removeEventListener('message', receiveMessage);
     const strWindowFeatures = 'toolbar=no, menubar=no, width=600, height=700, top=100, left=100';
-    if (!windowObjectReference || windowObjectReference.closed) {
-        /* ifno window, or window was closed */
+    if (!windowObjectReference || windowObjectReference.closed || previousUrl !== url) {
+        /* if no window, or window was closed */
         windowObjectReference = window.open(url, name, strWindowFeatures);
-    } else if (previousUrl !== url) {
-        /* if URL changed, reuse window and focus it */
-        windowObjectReference = window.open(url, name, strWindowFeatures);
-        windowObjectReference?.focus();
+        if (previousUrl !== url) {
+            /* URL changed, focus window */
+            windowObjectReference?.focus();
+        }
     } else {
         /* window already exists. */
         windowObjectReference.focus();
     }
     // listen for receiving a message from the popup
-    window.addEventListener('message', (event) => receiveMessage(event), { capture: false, once: true });
+    window.addEventListener('message', receiveMessage, { capture: false, once: true });
     // assign the previous URL
     previousUrl = url;
 };
