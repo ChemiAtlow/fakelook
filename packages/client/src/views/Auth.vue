@@ -1,5 +1,6 @@
 <template>
-    <Container>
+    <app-loader v-if="isCallback" />
+    <Container v-else>
         <form>
             <h1>{{ pageTitle }}</h1>
             <FormField
@@ -56,9 +57,7 @@
                 </Button>
             </div>
             <div class="btn__wrapper">
-                <Button color="gray" icon="google" @click="googleLogin">
-                    Login with Google
-                </Button>
+                <GoogleButton />
             </div>
         </template>
     </Container>
@@ -68,31 +67,44 @@
 import { defineComponent } from "vue";
 import { Container } from "@/components/Layout";
 import { FormField, Button } from "@/components/Forms";
+import GoogleButton from "@/components/Auth/GoogleButton.vue";
 import {
     username,
     password,
     email,
     repeatPassword,
     isLogin,
+    isCallback,
     isSignup,
     isRecover,
     pageTitle,
-    changeView,
+    changeView
 } from "@/compositions/auth";
+import { authService } from "@/services";
 
 const component = defineComponent({
     name: "Auth",
-    components: { Container, FormField, Button },
-    setup() {
-        const googleLogin = () => {
-            const clientId =
-                "77598589513-08uj972lr28be5cdcl6a2bp8frk3h94j.apps.googleusercontent.com";
-            const redirectUri = "http://localhost:4441/google/callback";
-            const scope = "profile email openid";
-            const responseType = "code";
-            const link = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${redirectUri}&mode=popup&scope=${scope}&response_type=${responseType}&access_type=offline&include_granted_scopes=true`;
-            open(link);
-        };
+    components: { Container, FormField, Button, GoogleButton },
+    async setup() {
+        if (isCallback.value) {
+            const queries = new URLSearchParams(window.location.search);
+            let msg = "ERR";
+            if (queries.has("code")) {
+                const code = queries.get("code") || "";
+                const origin = location.href.split("?")[0];
+                try {
+                    const { data } = await authService.connect(code, origin);
+                    msg = data.jwt;
+                } catch (err) {
+                    console.warn(err);
+                    msg = "ERR";
+                }
+            }
+            if (window.opener) {
+                window.opener.postMessage(msg);
+                window.close();
+            }
+        }
         return {
             username,
             password,
@@ -100,12 +112,12 @@ const component = defineComponent({
             repeatPassword,
             changeView,
             isLogin,
+            isCallback,
             isSignup,
             isRecover,
-            pageTitle,
-            googleLogin,
+            pageTitle
         };
-    },
+    }
 });
 
 export default component;
