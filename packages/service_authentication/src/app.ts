@@ -5,7 +5,7 @@ import compression from "compression";
 import morgan from "morgan";
 import { json } from "body-parser";
 import { appLoggerService } from "./services";
-import { basicAuthRoutes } from "./routes";
+import { basicAuthRoutes, googleRouter } from "./routes";
 import { constants, middleware, utils } from "@fakelook/common";
 const { requestIdAssignMiddleware, errorMiddleware, notFoundMiddleware } = middleware;
 
@@ -32,6 +32,8 @@ app.use(json());
 app.use(compression());
 
 app.use("/basic", basicAuthRoutes);
+app.use("/google", googleRouter);
+
 app.use("*", notFoundMiddleware(appLoggerService));
 app.use(errorMiddleware(appLoggerService));
 

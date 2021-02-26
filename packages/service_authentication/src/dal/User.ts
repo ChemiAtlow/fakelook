@@ -5,7 +5,7 @@ import { sequelize } from "./MySqlConnection";
 
 type UserAttributes = models.interfaces.AuthUser;
 
-interface UserCreationAttributes extends Optional<UserAttributes, "id" | "role"> {}
+interface UserCreationAttributes extends Optional<UserAttributes, "id" | "role" | "provider"> {}
 
 interface UserInstance extends Model<UserAttributes, UserCreationAttributes>, UserAttributes {}
 
@@ -34,6 +34,12 @@ export const userModel = sequelize.define<UserInstance>("User", {
         values: ["user", "admin"],
         allowNull: false,
         defaultValue: "user",
+    },
+    provider: {
+        type: DataTypes.ENUM,
+        values: ["basic", "google", "facebook"],
+        allowNull: false,
+        defaultValue: "basic"
     },
     resetToken: {
         type: DataTypes.STRING,
