@@ -1,1 +1,1 @@
-export * as googleAuthService from "./googleAuth.service";
+export * as authService from "./auth.service";
