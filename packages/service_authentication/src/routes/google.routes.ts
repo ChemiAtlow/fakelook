@@ -3,4 +3,4 @@ import { googleController } from "../controllers";
 
 export const googleRouter = Router();
 
-googleRouter.get("/login", googleController.connectWithCode);
+googleRouter.post("/login", googleController.connectWithCode);
