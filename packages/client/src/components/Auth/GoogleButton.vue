@@ -18,7 +18,7 @@ const component = defineComponent({
             "client_id",
             "77598589513-08uj972lr28be5cdcl6a2bp8frk3h94j.apps.googleusercontent.com"
         );
-        qs.append("redirect_uri", "http://localhost:8081/auth_cb");
+        qs.append("redirect_uri", "http://localhost:8080/auth_cb");
         qs.append("scope", "profile email openid");
         qs.append("response_type", "code");
         qs.append("access_type", "offline");

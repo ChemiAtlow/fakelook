@@ -52,9 +52,7 @@
         </div>
         <template v-if="isLogin">
             <div class="btn__wrapper">
-                <Button color="gray" icon="facebook">
-                    Login with Facebook
-                </Button>
+                <FacebookButton />
             </div>
             <div class="btn__wrapper">
                 <GoogleButton />
@@ -68,6 +66,7 @@ import { defineComponent } from "vue";
 import { Container } from "@/components/Layout";
 import { FormField, Button } from "@/components/Forms";
 import GoogleButton from "@/components/Auth/GoogleButton.vue";
+import FacebookButton from "@/components/Auth/FacebookButton.vue";
 import {
     username,
     password,
@@ -78,13 +77,13 @@ import {
     isSignup,
     isRecover,
     pageTitle,
-    changeView
+    changeView,
 } from "@/compositions/auth";
 import { authService } from "@/services";
 
 const component = defineComponent({
     name: "Auth",
-    components: { Container, FormField, Button, GoogleButton },
+    components: { Container, FormField, Button, GoogleButton, FacebookButton },
     async setup() {
         if (isCallback.value) {
             const queries = new URLSearchParams(window.location.search);
@@ -92,9 +91,14 @@ const component = defineComponent({
             if (queries.has("code")) {
                 const code = queries.get("code") || "";
                 const origin = location.href.split("?")[0];
+                const provider = queries.has("state") ? "facebook" : "google";
                 try {
-                    const { data } = await authService.connect(code, origin);
-                    msg = data.jwt;
+                    const { jwt } = await authService.thirdPartyConnect(
+                        code,
+                        origin,
+                        provider
+                    );
+                    msg = jwt;
                 } catch (err) {
                     console.warn(err);
                     msg = "ERR";
@@ -115,9 +119,9 @@ const component = defineComponent({
             isCallback,
             isSignup,
             isRecover,
-            pageTitle
+            pageTitle,
         };
-    }
+    },
 });
 
 export default component;
