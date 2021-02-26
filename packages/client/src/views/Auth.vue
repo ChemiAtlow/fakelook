@@ -80,7 +80,7 @@ import {
     pageTitle,
     changeView
 } from "@/compositions/auth";
-import { googleAuthService } from "@/services";
+import { authService } from "@/services";
 
 const component = defineComponent({
     name: "Auth",
@@ -93,7 +93,7 @@ const component = defineComponent({
                 const code = queries.get("code") || "";
                 const origin = location.href.split("?")[0];
                 try {
-                    const { data } = await googleAuthService.connect(code, origin);
+                    const { data } = await authService.connect(code, origin);
                     msg = data.jwt;
                 } catch (err) {
                     console.warn(err);
