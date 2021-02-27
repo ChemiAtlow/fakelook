@@ -65,8 +65,7 @@
 import { defineComponent } from "vue";
 import { Container } from "@/components/Layout";
 import { FormField, Button } from "@/components/Forms";
-import GoogleButton from "@/components/Auth/GoogleButton.vue";
-import FacebookButton from "@/components/Auth/FacebookButton.vue";
+import { FacebookButton, GoogleButton } from "@/components/Auth";
 import {
     username,
     password,
