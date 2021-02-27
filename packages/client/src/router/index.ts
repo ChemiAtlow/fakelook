@@ -14,7 +14,7 @@ const routes: Array<RouteRecordRaw> = [
     {
         path: "/:page(login|signup|recover|reset|auth_cb)/:token?",
         name: "Auth",
-        component: () => import(/* webpackChunkName: "auth-pages" */ "../views/Auth.vue"),
+        component: () => import(/* webpackChunkName: "auth" */ "../views/Auth.vue"),
     },
     {
         path: "/:catchAll(.*)",
