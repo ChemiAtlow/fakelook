@@ -51,7 +51,7 @@ export default component;
 .slide-enter-from,
 .slide-leave-to {
     opacity: 0;
-    transform: translateX(60px);
+    transform: translateX(30%) !important;
 }
 .slide-enter-active,
 .slide-leave-active {

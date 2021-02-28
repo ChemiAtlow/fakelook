@@ -1,7 +1,7 @@
 <template>
     <BaseModal :close="close">
         <template #title>{{ title }}</template>
-        <template #default>{{ message }}</template>
+        <template #default><p>{{ message }}</p></template>
         <template #footer>
             <Button v-if="okText" @click="close(true)">{{okText}}</Button>
             <Button v-if="cancelText" @click="close(false)">{{cancelText}}</Button>
