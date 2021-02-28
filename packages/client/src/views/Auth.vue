@@ -1,7 +1,7 @@
 <template>
     <app-loader v-if="isCallback" />
     <Container v-else>
-        <form>
+        <form @submit.prevent>
             <h1>{{ pageTitle }}</h1>
             <FormField
                 label="Username"
@@ -33,7 +33,7 @@
                 autocomplete="off"
                 :error="repeatPassword.error"
             />
-            <Button>Submit</Button>
+            <Button :disabled="!isValid">Submit</Button>
         </form>
         <div class="btn__wrapper">
             <Button
@@ -75,6 +75,7 @@ import {
     isCallback,
     isSignup,
     isRecover,
+    isValid,
     pageTitle,
     changeView,
 } from "@/compositions/auth";
@@ -118,6 +119,7 @@ const component = defineComponent({
             isCallback,
             isSignup,
             isRecover,
+            isValid,
             pageTitle,
         };
     },

@@ -15,6 +15,20 @@ export const isLogin = computed(() => /login/.test(currentRoute.value.path));
 export const isSignup = computed(() => /signup/.test(currentRoute.value.path));
 export const isRecover = computed(() => /recover/.test(currentRoute.value.path));
 
+export const isValid = computed(() => {
+    if (isLogin.value) {
+        return !username.error && username.value && !password.error && password.value;
+    } else if (isRecover.value) {
+        return !email.error && email.value;
+    } else if (isSignup.value) {
+        return !username.error && username.value && !password.error && !repeatPassword.error && !email.error && email.value;
+    } else if (!isCallback.value) {
+        return !password.error && !repeatPassword.error;
+    } else {
+        return true;
+    }
+})
+
 watch(
     () => username.value,
     (val) => {
