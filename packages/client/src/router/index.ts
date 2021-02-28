@@ -1,11 +1,14 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
+import { activeUser } from "@/compositions/authState";
+import { openModal } from "@/compositions/modal";
+import { MessageModal } from "@/components/Modal";
 
 const routes: Array<RouteRecordRaw> = [
     {
         path: "/",
         name: "Home",
         meta: {
-            needsAuth: true,
+            requiresAuth: true,
         },
         component: () => import(/* webpackChunkName: "home" */ "../views/Home.vue"),
     },
@@ -29,10 +32,17 @@ const router = createRouter({
     history: createWebHistory(process.env.BASE_URL),
     routes,
 });
-router.beforeEach(async (to, _, next) => {
-    if (to.meta.needsAuth) {
-        console.log("only auth users, check auth state here.");
-        next({ name: "Auth", replace: true });
+router.beforeEach((to, _, next) => {
+    if (to.meta.requiresAuth && !activeUser.isConnected) {
+        openModal(MessageModal, {
+            title: "You are not logged in",
+            message:
+                "The page you attempted to reach requires authentication.\nPlease log in to continue!",
+            okText: "OK",
+        });
+        next({ path: "/login", replace: true, query: { redirect: to.fullPath } });
+    } else if (to.name === "Auth" && activeUser.isConnected) {
+        next({ name: "Home" });
     } else {
         next();
     }
