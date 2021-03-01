@@ -3,7 +3,7 @@
         <template #title>
             <div class="error-modal__title">
                 <div class="error-modal__title-icon">
-                    <Icon icon="error" color="#ac0f1d" :size="25" />
+                    <Icon icon="error" :color="darkRed" :size="25" />
                 </div>
                 <span>{{ title }}</span>
             </div>
@@ -20,6 +20,7 @@
 <script lang="ts">
 import { defineComponent, PropType } from "vue";
 import { BaseModal } from ".";
+import styles from "@/utils/_exportVars.scss";
 import { Button } from "@/components/Forms";
 import { Icon } from "@/components/Icon";
 
@@ -33,6 +34,9 @@ const component = defineComponent({
         },
         title: String,
         message: String
+    },
+    setup() {
+        return { darkRed: styles.darkRed }
     }
 });
 
