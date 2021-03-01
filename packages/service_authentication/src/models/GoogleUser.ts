@@ -1,7 +1,6 @@
 export type GoogleUser = {
     id: string;
     email: string;
-    name: string;
     /*eslint-disable @typescript-eslint/naming-convention*/
     given_name: string;
     family_name: string;
