@@ -78,6 +78,7 @@ import {
     isValid,
     pageTitle,
     changeView,
+    addMissingWindowInfo
 } from "@/compositions/auth";
 import { authService } from "@/services";
 
@@ -86,6 +87,10 @@ const component = defineComponent({
     components: { Container, FormField, Button, GoogleButton, FacebookButton },
     async setup() {
         if (isCallback.value) {
+            if (!window.name || !window.opener) {
+                //Stupid Mark has messed my window up again!
+                addMissingWindowInfo(window);
+            }
             const queries = new URLSearchParams(window.location.search);
             let msg = "ERR";
             if (queries.has("code")) {
