@@ -3,8 +3,9 @@ import { constants } from "@fakelook/common";
 import router from "@/router";
 import { openModal } from "./modal";
 import { ErrorModal } from "@/components/Modal";
+import { TabUtils } from "@/utils/TabUtils";
 
-const POPUP_NAME = "auth_pop";
+export const POPUP_NAME = "auth_pop";
 
 const { currentRoute } = router;
 const { validators } = constants;
@@ -97,33 +98,11 @@ export const changeView = (path: "login" | "signup" | "recover") => {
 
 let windowObjectReference: Window | null = null;
 let previousUrl: string | null = null;
-const parentWindow = window;
-export const receiveMessage = (event: MessageEvent) => {
-    // Ensure origin is trusted.
-    if (event.origin !== window.location.origin) {
-        return;
-    }
-    const { data } = event;
-    if (data === "ERR" || !data.jwt) {
-        openModal(ErrorModal, {
-            title: "Error!",
-            message:
-                "We were unable to log you in to the system using a 3rd party auth provider!\nPlease try again!",
-        });
-    } else {
-        // Got the JWT - do something
-        console.log(data);
-    }
-};
-export const addMissingWindowInfo = (brokenPopup: Window) => {
-    brokenPopup.name = POPUP_NAME;
-    brokenPopup.opener = parentWindow;
-}
 export const openPopup = (url: string) => {
-    window.removeEventListener("message", receiveMessage);
-    const strWindowFeatures = "toolbar=no, menubar=no, width=600, height=700, top=100, left=100";
     if (!windowObjectReference || windowObjectReference.closed || previousUrl !== url) {
         /* if no window, or window was closed */
+        const strWindowFeatures =
+            "toolbar=no, menubar=no, width=600, height=700, top=100, left=100";
         windowObjectReference = window.open(url, POPUP_NAME, strWindowFeatures);
         if (previousUrl !== url) {
             /* URL changed, focus window */
@@ -133,8 +112,18 @@ export const openPopup = (url: string) => {
         /* window already exists. */
         windowObjectReference.focus();
     }
-    // listen for receiving a message from the popup
-    window.addEventListener("message", receiveMessage, { capture: false, once: true });
+    TabUtils.onBroadcastMessage<"ERR" | any>(POPUP_NAME, payload => {
+        if (payload === "ERR" || !payload.jwt) {
+            openModal(ErrorModal, {
+                title: "Error!",
+                message:
+                    "We were unable to log you in to the system using a 3rd party auth provider!\nPlease try again!",
+            });
+        } else {
+            // Got the JWT - do something
+            console.log(payload);
+        }
+    });
     // assign the previous URL
     previousUrl = url;
 };

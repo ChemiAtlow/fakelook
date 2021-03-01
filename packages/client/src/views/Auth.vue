@@ -78,19 +78,16 @@ import {
     isValid,
     pageTitle,
     changeView,
-    addMissingWindowInfo
+    POPUP_NAME
 } from "@/compositions/auth";
 import { authService } from "@/services";
+import { TabUtils } from "@/utils/TabUtils";
 
 const component = defineComponent({
     name: "Auth",
     components: { Container, FormField, Button, GoogleButton, FacebookButton },
     async setup() {
         if (isCallback.value) {
-            if (!window.name || !window.opener) {
-                //Stupid Mark has messed my window up again!
-                addMissingWindowInfo(window);
-            }
             const queries = new URLSearchParams(window.location.search);
             let msg = "ERR";
             if (queries.has("code")) {
@@ -98,21 +95,18 @@ const component = defineComponent({
                 const origin = location.href.split("?")[0];
                 const provider = queries.has("state") ? "facebook" : "google";
                 try {
-                    const { jwt } = await authService.thirdPartyConnect(
-                        code,
-                        origin,
-                        provider
-                    );
+                    const { jwt } = await authService.thirdPartyConnect(code, origin, provider);
                     msg = jwt;
                 } catch (err) {
                     console.warn(err);
                     msg = "ERR";
                 }
             }
-            if (window.opener) {
-                window.opener.postMessage(msg);
-                window.close();
-            }
+            TabUtils.broadcastMessageToAllTabs(POPUP_NAME, {
+                msg,
+                source: POPUP_NAME
+            });
+            window.close();
         }
         return {
             username,
@@ -125,9 +119,9 @@ const component = defineComponent({
             isSignup,
             isRecover,
             isValid,
-            pageTitle,
+            pageTitle
         };
-    },
+    }
 });
 
 export default component;
