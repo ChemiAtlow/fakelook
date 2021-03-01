@@ -5,7 +5,7 @@ const { clientDomain, clientPort } = constants.URLS;
 
 export const sendSignUpEmail = async (emailAddress: string) => {
     appLoggerService.verbose("Send an email to user on signup", { emailAddress });
-    const body = `<p>Hi there ${emailAddress}!</p><p>You can now log in to <a href="${clientDomain}:${clientPort}/login">Fakelook</a>.</p>`;
+    const body = `<p>Hi there ${emailAddress}!</p><p>You completed signing up to Fakelook, and can now log in to <a href="${clientDomain}:${clientPort}/login">Fakelook</a>.</p>`;
     const msg: models.interfaces.Email = {
         subject: "Welcome to Fakelook! 🤗",
         body,

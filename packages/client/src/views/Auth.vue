@@ -1,6 +1,7 @@
 <template>
-    <Container>
-        <form>
+    <app-loader v-if="isCallback" />
+    <Container v-else>
+        <form @submit.prevent>
             <h1>{{ pageTitle }}</h1>
             <FormField
                 label="Username"
@@ -32,7 +33,7 @@
                 autocomplete="off"
                 :error="repeatPassword.error"
             />
-            <Button>Submit</Button>
+            <Button :disabled="!isValid">Submit</Button>
         </form>
         <div class="btn__wrapper">
             <Button
@@ -51,14 +52,10 @@
         </div>
         <template v-if="isLogin">
             <div class="btn__wrapper">
-                <Button color="gray" icon="facebook">
-                    Login with Facebook
-                </Button>
+                <FacebookButton />
             </div>
             <div class="btn__wrapper">
-                <Button color="gray" icon="google" @click="googleLogin">
-                    Login with Google
-                </Button>
+                <GoogleButton />
             </div>
         </template>
     </Container>
@@ -68,51 +65,49 @@
 import { defineComponent } from "vue";
 import { Container } from "@/components/Layout";
 import { FormField, Button } from "@/components/Forms";
+import { FacebookButton, GoogleButton } from "@/components/Auth";
 import {
     username,
     password,
     email,
     repeatPassword,
     isLogin,
+    isCallback,
     isSignup,
     isRecover,
+    isValid,
     pageTitle,
     changeView,
+    POPUP_NAME
 } from "@/compositions/auth";
+import { authService } from "@/services";
+import { TabUtils } from "@/utils/TabUtils";
 
 const component = defineComponent({
     name: "Auth",
-    components: { Container, FormField, Button },
+    components: { Container, FormField, Button, GoogleButton, FacebookButton },
     async setup() {
-        let auth2: any = {};
-        await new Promise<void>((res, rej) => {
-            const gAPIScript = document.createElement("script");
-            gAPIScript.setAttribute(
-                "src",
-                "https://apis.google.com/js/client:platform.js"
-            );
-            document.head.appendChild(gAPIScript);
-            gAPIScript.onload = () => {
-                const gapi = (window as any).gapi;
-                gapi.load("auth2", function () {
-                    auth2 = gapi.auth2.init({
-                        //eslint-disable-next-line @typescript-eslint/camelcase
-                        client_id:
-                            "77598589513-08uj972lr28be5cdcl6a2bp8frk3h94j.apps.googleusercontent.com",
-                    });
-                });
-
-                res();
-            };
-        });
-        const googleLogin = async () => {
-            try {
-                const info = await auth2.grantOfflineAccess();
-                console.log(info);
-            } catch (error) {
-                console.warn(error);
+        if (isCallback.value) {
+            const queries = new URLSearchParams(window.location.search);
+            let msg = "ERR";
+            if (queries.has("code")) {
+                const code = queries.get("code") || "";
+                const origin = location.href.split("?")[0];
+                const provider = queries.has("state") ? "facebook" : "google";
+                try {
+                    const { jwt } = await authService.thirdPartyConnect(code, origin, provider);
+                    msg = jwt;
+                } catch (err) {
+                    console.warn(err);
+                    msg = "ERR";
+                }
             }
-        };
+            TabUtils.broadcastMessageToAllTabs(POPUP_NAME, {
+                msg,
+                source: POPUP_NAME
+            });
+            window.close();
+        }
         return {
             username,
             password,
@@ -120,12 +115,13 @@ const component = defineComponent({
             repeatPassword,
             changeView,
             isLogin,
+            isCallback,
             isSignup,
             isRecover,
-            pageTitle,
-            googleLogin,
+            isValid,
+            pageTitle
         };
-    },
+    }
 });
 
 export default component;

@@ -7,7 +7,9 @@ import { json } from "body-parser";
 import { appLoggerService } from "./services";
 // import { questionsRoutes, authRoutes, testRoutes, reportRoutes, examRoutes } from "./routes";
 import { constants, middleware, utils } from "@fakelook/common";
+import proxy from "express-http-proxy";
 const { requestIdAssignMiddleware, errorMiddleware, notFoundMiddleware } = middleware;
+const { authDomain, authPort } = constants.URLS;
 
 morgan.token("id", function getId(req: Request) {
     return req.id;
@@ -24,10 +26,13 @@ app.use(
         stream: appLoggerService.logStream,
     })
 );
+
+
+app.use("/auth", proxy(`${authDomain}:${authPort}`));
+
 app.use(json());
 app.use(compression());
 
-// app.use("/auth", authRoutes);
 app.use("*", notFoundMiddleware(appLoggerService));
 app.use(errorMiddleware(appLoggerService));
 
