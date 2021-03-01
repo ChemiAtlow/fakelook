@@ -112,18 +112,19 @@ export const openPopup = (url: string) => {
         /* window already exists. */
         windowObjectReference.focus();
     }
-    TabUtils.onBroadcastMessage<"ERR" | any>(POPUP_NAME, payload => {
-        if (payload === "ERR" || !payload.jwt) {
-            openModal(ErrorModal, {
-                title: "Error!",
-                message:
-                    "We were unable to log you in to the system using a 3rd party auth provider!\nPlease try again!",
-            });
-        } else {
-            // Got the JWT - do something
-            console.log(payload);
-        }
-    });
     // assign the previous URL
     previousUrl = url;
 };
+
+TabUtils.onBroadcastMessage<"ERR" | any>(POPUP_NAME, payload => {
+    if (payload === "ERR" || !payload.jwt) {
+        openModal(ErrorModal, {
+            title: "Error!",
+            message:
+                "We were unable to log you in to the system using a 3rd party auth provider!\nPlease try again!",
+        });
+    } else {
+        // Got the JWT - do something
+        console.log(payload);
+    }
+});
