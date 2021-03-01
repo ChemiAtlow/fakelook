@@ -29,7 +29,7 @@ const component = defineComponent({
         const link = `https://www.facebook.com/v10.0/dialog/oauth?${qs.toString()}`;
 
         const logInWithFacebook = () => {
-            openPopup(link, "auth_pop");
+            openPopup(link);
         };
 
         return { logInWithFacebook };

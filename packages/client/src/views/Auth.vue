@@ -1,7 +1,7 @@
 <template>
     <app-loader v-if="isCallback" />
     <Container v-else>
-        <form>
+        <form @submit.prevent>
             <h1>{{ pageTitle }}</h1>
             <FormField
                 label="Username"
@@ -33,7 +33,7 @@
                 autocomplete="off"
                 :error="repeatPassword.error"
             />
-            <Button>Submit</Button>
+            <Button :disabled="!isValid">Submit</Button>
         </form>
         <div class="btn__wrapper">
             <Button
@@ -65,8 +65,7 @@
 import { defineComponent } from "vue";
 import { Container } from "@/components/Layout";
 import { FormField, Button } from "@/components/Forms";
-import GoogleButton from "@/components/Auth/GoogleButton.vue";
-import FacebookButton from "@/components/Auth/FacebookButton.vue";
+import { FacebookButton, GoogleButton } from "@/components/Auth";
 import {
     username,
     password,
@@ -76,10 +75,13 @@ import {
     isCallback,
     isSignup,
     isRecover,
+    isValid,
     pageTitle,
     changeView,
+    POPUP_NAME
 } from "@/compositions/auth";
 import { authService } from "@/services";
+import { TabUtils } from "@/utils/TabUtils";
 
 const component = defineComponent({
     name: "Auth",
@@ -93,21 +95,18 @@ const component = defineComponent({
                 const origin = location.href.split("?")[0];
                 const provider = queries.has("state") ? "facebook" : "google";
                 try {
-                    const { jwt } = await authService.thirdPartyConnect(
-                        code,
-                        origin,
-                        provider
-                    );
+                    const { jwt } = await authService.thirdPartyConnect(code, origin, provider);
                     msg = jwt;
                 } catch (err) {
                     console.warn(err);
                     msg = "ERR";
                 }
             }
-            if (window.opener) {
-                window.opener.postMessage(msg);
-                window.close();
-            }
+            TabUtils.broadcastMessageToAllTabs(POPUP_NAME, {
+                msg,
+                source: POPUP_NAME
+            });
+            window.close();
         }
         return {
             username,
@@ -119,9 +118,10 @@ const component = defineComponent({
             isCallback,
             isSignup,
             isRecover,
-            pageTitle,
+            isValid,
+            pageTitle
         };
-    },
+    }
 });
 
 export default component;

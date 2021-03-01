@@ -25,7 +25,7 @@ const component = defineComponent({
         qs.append("include_granted_scopes", "true");
         const link = `https://accounts.google.com/o/oauth2/v2/auth?${qs.toString()}`;
         const googleLogin = () => {
-            openPopup(link, "auth_pop");
+            openPopup(link);
         };
         return { googleLogin, link };
     }

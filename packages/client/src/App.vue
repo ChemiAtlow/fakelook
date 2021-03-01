@@ -23,15 +23,19 @@
             </transition>
         </router-view>
     </div>
+    <teleport to="body">
+        <ModalHandler />
+    </teleport>
 </template>
 
 <script lang="ts">
 import { defineComponent, onErrorCaptured, ref } from "vue";
+import { ModalHandler } from "@/components/Modal";
 import NavBar from "@/components/NavBar/index.vue";
 
 const component = defineComponent({
     name: "App",
-    components: { NavBar },
+    components: { NavBar, ModalHandler },
     setup() {
         const error = ref<Error>();
         onErrorCaptured(e => {
@@ -91,16 +95,38 @@ body {
             textarea {
                 font-family: "Assistant", sans-serif;
             }
-            .fade-enter,
-            .fade-leave {
-                &-active {
-                    transition: opacity 0.5s ease;
-                }
-                &-from,
-                &-to {
-                    opacity: 0;
-                }
-            }
+        }
+    }
+    .fade {
+        &-enter-active,
+        &-leave-active {
+            transition: opacity 0.5s ease;
+        }
+        &-enter-from,
+        &-leave-to {
+            opacity: 0;
+        }
+    }
+    .slide-right {
+        &-enter-active,
+        &-leave-active {
+            transition: all 0.5s ease;
+        }
+        &-enter-from,
+        &-leave-to {
+            opacity: 0;
+            transform: translateX(100%);
+        }
+    }
+    .slide-left {
+        &-enter-active,
+        &-leave-active {
+            transition: all 0.5s ease;
+        }
+        &-enter-from,
+        &-leave-to {
+            opacity: 0;
+            transform: translateX(-100%);
         }
     }
 }
