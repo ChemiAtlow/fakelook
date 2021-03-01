@@ -1,6 +1,6 @@
 const path = require("path");
 const nodeExternals = require("webpack-node-externals");
-const { HotModuleReplacementPlugin } = require("webpack");
+const { HotModuleReplacementPlugin, ProgressPlugin } = require("webpack");
 const { NODE_ENV = "production" } = process.env;
 const PKG_DIR = path.join(__dirname, "packages");
 const COMMON_DIR = path.join(PKG_DIR, "common");
@@ -27,41 +27,53 @@ const commonSetting = {
         extensions: [".ts", ".js"],
     },
     externals: [nodeExternals()],
-    plugins: [
-        new HotModuleReplacementPlugin()
-    ],
-    module: {
-        rules: [
-            tsRule(COMMON_DIR),
-            tsRule(SERVER_DIR),
-            tsRule(AUTH_DIR),
-            tsRule(IDENTITY_DIR),
-            tsRule(POSTS_DIR),
-            tsRule(VIEW_DIR),
-        ],
-    },
+    plugins: [new ProgressPlugin(), new HotModuleReplacementPlugin()],
 };
 
 module.exports = [
     {
+        entry: path.join(COMMON_DIR, "src", "index.ts"),
+        output: {
+            path: COMMON_DIR,
+            filename: `dist/index.js`,
+        },
+        module: {
+            rules: [
+                tsRule(COMMON_DIR),
+            ],
+        },
+        ...commonSetting,
+    },
+    {
         entry: {
-            common: path.join(COMMON_DIR, "src", "index.ts"),
             server: {
-                dependOn: "common",
                 import: path.join(SERVER_DIR, "src", "app.ts"),
             },
             service_authentication: {
-                dependOn: "common",
                 import: path.join(AUTH_DIR, "src", "app.ts"),
             },
             service_identity: {
-                dependOn: "common",
                 import: path.join(IDENTITY_DIR, "src", "app.ts"),
+            },
+            service_posts: {
+                import: path.join(POSTS_DIR, "src", "app.ts"),
+            },
+            service_view: {
+                import: path.join(VIEW_DIR, "src", "app.ts"),
             },
         },
         output: {
             path: PKG_DIR,
-            filename: "[name]/dist/index.js",
+            filename: `[name]/dist/app.js`,
+        },
+        module: {
+            rules: [
+                tsRule(SERVER_DIR),
+                tsRule(AUTH_DIR),
+                tsRule(IDENTITY_DIR),
+                tsRule(POSTS_DIR),
+                tsRule(VIEW_DIR),
+            ],
         },
         ...commonSetting,
     },
