@@ -13,7 +13,7 @@
         "build": "tsc -b",
         "test": "echo \"Error: run tests from root\" && exit 1",
         "lint": "eslint src --ext ts",
-        "execute": "node --inspect=4445 ./dist/app",
+        "execute": "nodemon --inspect ./dist/app.js",
         "prebuild": "rimraf \"./dist\"",
         "build:watch": "nodemon --watch src/ -e ts --exec \"npm run lint && npm run build && npm run execute\"",
         "start:dev": "npm run build:watch"
