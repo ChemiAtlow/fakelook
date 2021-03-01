@@ -1,5 +1,6 @@
 const path = require("path");
 const nodeExternals = require("webpack-node-externals");
+const WebpackShellPlugin = require("webpack-shell-plugin-next");
 const { HotModuleReplacementPlugin, ProgressPlugin } = require("webpack");
 const { NODE_ENV = "production" } = process.env;
 const PKG_DIR = path.join(__dirname, "packages");
@@ -26,8 +27,7 @@ const commonSetting = {
     resolve: {
         extensions: [".ts", ".js"],
     },
-    externals: [nodeExternals()],
-    plugins: [new ProgressPlugin(), new HotModuleReplacementPlugin()],
+    externals: [nodeExternals({ allowlist: ["@fakelook/common"] })],
 };
 
 module.exports = [
@@ -38,10 +38,9 @@ module.exports = [
             filename: `dist/index.js`,
         },
         module: {
-            rules: [
-                tsRule(COMMON_DIR),
-            ],
+            rules: [tsRule(COMMON_DIR)],
         },
+        plugins: [new ProgressPlugin(), new HotModuleReplacementPlugin()],
         ...commonSetting,
     },
     {
@@ -66,6 +65,11 @@ module.exports = [
             path: PKG_DIR,
             filename: `[name]/dist/app.js`,
         },
+        plugins: [
+            new ProgressPlugin(),
+            new HotModuleReplacementPlugin(),
+            new WebpackShellPlugin({ onBuildEnd: {scripts: ["npm start"]} }),
+        ],
         module: {
             rules: [
                 tsRule(SERVER_DIR),
