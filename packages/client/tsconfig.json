@@ -15,9 +15,11 @@
       "webpack-env"
     ],
     "paths": {
+      "@fakelook/*": ["../*/src"],
       "@/*": [
         "src/*"
       ]
+      
     },
     "lib": [
       "esnext",
