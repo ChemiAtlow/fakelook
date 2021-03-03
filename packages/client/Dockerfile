@@ -6,7 +6,7 @@ COPY ./package.json yarn.lock ./
 RUN yarn
 
 COPY ./packages/client ./packages/client
-COPY ./packages/common /packages/common
+COPY ./packages/common ./packages/common
 
 WORKDIR /app/packages/client
 RUN npm run build
