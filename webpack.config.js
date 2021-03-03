@@ -1,6 +1,7 @@
 const path = require("path");
 const nodeExternals = require("webpack-node-externals");
 const WebpackShellPlugin = require("webpack-shell-plugin-next");
+const RemovePlugin = require("remove-files-webpack-plugin");
 const { HotModuleReplacementPlugin, ProgressPlugin } = require("webpack");
 const { NODE_ENV = "production" } = process.env;
 const PKG_DIR = path.join(__dirname, "packages");
@@ -26,6 +27,8 @@ const commonSetting = {
     watch: NODE_ENV === "development",
     resolve: {
         extensions: [".ts", ".js"],
+        symlinks: false,
+        alias: { "@fakelook/common": path.join(COMMON_DIR, "src") },
     },
     externals: [nodeExternals({ allowlist: ["@fakelook/common"] })],
 };
@@ -37,9 +40,7 @@ module.exports = [
             path: COMMON_DIR,
             filename: `dist/index.js`,
         },
-        module: {
-            rules: [tsRule(COMMON_DIR)],
-        },
+        module: { rules: [tsRule(COMMON_DIR)] },
         plugins: [new ProgressPlugin(), new HotModuleReplacementPlugin()],
         ...commonSetting,
     },
@@ -68,10 +69,13 @@ module.exports = [
         plugins: [
             new ProgressPlugin(),
             new HotModuleReplacementPlugin(),
-            new WebpackShellPlugin({ onBuildEnd: {scripts: ["npm start"]} }),
+            new WebpackShellPlugin({
+                onBuildEnd: { scripts: NODE_ENV === "development" ? ["yarn start"] : [] },
+            }),
         ],
         module: {
             rules: [
+                tsRule(COMMON_DIR),
                 tsRule(SERVER_DIR),
                 tsRule(AUTH_DIR),
                 tsRule(IDENTITY_DIR),

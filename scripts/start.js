@@ -5,32 +5,32 @@ const client = "client";
 const server = "server";
 const commands = {
     back: {
-        command: "cd packages/server && npm run execute",
+        command: "cd packages/server && yarn execute",
         name: server,
         prefixColor: "cyan.bold",
     },
     auth: {
-        command: "cd packages/service_authentication && npm run execute",
+        command: "cd packages/service_authentication && yarn execute",
         name: "auth",
         prefixColor: "blue.bold",
     },
     identity: {
-        command: "cd packages/service_identity && npm run execute",
+        command: "cd packages/service_identity && yarn execute",
         name: "identity",
         prefixColor: "white.bold",
     },
     view: {
-        command: "cd packages/service_view && npm run execute",
+        command: "cd packages/service_view && yarn execute",
         name: "view",
         prefixColor: "red.bold",
     },
     posts: {
-        command: "cd packages/service_posts && npm run execute",
+        command: "cd packages/service_posts && yarn execute",
         name: "posts",
         prefixColor: "magenta.bold",
     },
     front: {
-        command: "cd packages/client && npm run serve",
+        command: "cd packages/client && yarn serve",
         name: client,
         prefixColor: "yellow.bold",
     },
