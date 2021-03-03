@@ -32,6 +32,7 @@ const commonSetting = {
     },
     externals: [nodeExternals({ allowlist: ["@fakelook/common"] })],
 };
+const commonPlugins = [new ProgressPlugin(), new HotModuleReplacementPlugin()];
 
 module.exports = [
     {
@@ -41,7 +42,10 @@ module.exports = [
             filename: `dist/index.js`,
         },
         module: { rules: [tsRule(COMMON_DIR)] },
-        plugins: [new ProgressPlugin(), new HotModuleReplacementPlugin()],
+        plugins: [
+            ...commonPlugins,
+            new RemovePlugin({ before: { include: [path.join(COMMON_DIR, "dist")] } }),
+        ],
         ...commonSetting,
     },
     {
@@ -67,10 +71,20 @@ module.exports = [
             filename: `[name]/dist/app.js`,
         },
         plugins: [
-            new ProgressPlugin(),
-            new HotModuleReplacementPlugin(),
+            ...commonPlugins,
             new WebpackShellPlugin({
                 onBuildEnd: { scripts: NODE_ENV === "development" ? ["yarn start"] : [] },
+            }),
+            new RemovePlugin({
+                before: {
+                    include: [
+                        path.join(SERVER_DIR, "dist"),
+                        path.join(AUTH_DIR, "dist"),
+                        path.join(IDENTITY_DIR, "dist"),
+                        path.join(POSTS_DIR, "dist"),
+                        path.join(VIEW_DIR, "dist"),
+                    ],
+                },
             }),
         ],
         module: {
