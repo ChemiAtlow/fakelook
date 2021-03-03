@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": "true",
   "workspaces": {
-    "nohoist": ["@vue/cli-service", "@vue/cli-service/**", "@vue/**"]
+    "nohoist": ["@vue/cli-service", "@vue/cli-service/**", "@vue/**", "vue/**", "vue-router/**"]
   },
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -22,12 +22,12 @@
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^2.33.0",
     "@typescript-eslint/parser": "^2.33.0",
-    "@vue/cli-plugin-babel": "4.5.11",
-    "@vue/cli-plugin-eslint": "4.5.11",
-    "@vue/cli-plugin-pwa": "4.5.11",
-    "@vue/cli-plugin-router": "4.5.11",
-    "@vue/cli-plugin-typescript": "4.5.11",
-    "@vue/cli-service": "4.5.11",
+    "@vue/cli-plugin-babel": "~4.5.11",
+    "@vue/cli-plugin-eslint": "~4.5.11",
+    "@vue/cli-plugin-pwa": "~4.5.11",
+    "@vue/cli-plugin-router": "~4.5.11",
+    "@vue/cli-plugin-typescript": "~4.5.11",
+    "@vue/cli-service": "~4.5.11",
     "@vue/compiler-sfc": "^3.0.5",
     "@vue/eslint-config-typescript": "^7.0.0",
     "eslint": "^6.7.2",

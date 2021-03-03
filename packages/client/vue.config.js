@@ -9,6 +9,7 @@ module.exports = {
     },
     configureWebpack: {
         resolve: {
+            mainFields: ["main", "module"],
             alias: {
                 "@fakelook/common": path.resolve(__dirname, "..", "common", "src"),
             },
