@@ -1,5 +1,6 @@
 class TabUtilsClass {
     static keyPrefix = "_tabUtils_";
+    //eslint-disable-next-line
     static handlers: { [messageId: string]: any } = {};
     broadcastMessageToAllTabs<T>(messageId: string, eventData: T) {
         const data = {

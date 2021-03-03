@@ -25,6 +25,7 @@ const component = defineComponent({
     name: "BaseModal",
     props: {
         close: {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             type: Function as PropType<(value?: any) => void>,
             required: true,
         },

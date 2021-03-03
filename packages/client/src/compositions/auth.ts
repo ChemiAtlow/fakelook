@@ -115,7 +115,7 @@ export const openPopup = (url: string) => {
     // assign the previous URL
     previousUrl = url;
 };
-
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 TabUtils.onBroadcastMessage<"ERR" | any>(POPUP_NAME, payload => {
     if (payload === "ERR" || !payload.jwt) {
         openModal(ErrorModal, {

@@ -12,8 +12,6 @@ import { defineComponent } from "vue";
 import { Button } from "@/components/Forms";
 import { openPopup } from "@/compositions/auth";
 
-declare const window: Window & { FB: any; fbAsyncInit: Function };
-
 const component = defineComponent({
     name: "FacebookAuthButton",
     components: { Button },
