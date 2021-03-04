@@ -1,4 +1,5 @@
-import { middleware, models } from "@fakelook/common";
+import { models } from "@fakelook/common";
+import { middleware } from "@fakelook/common/src/backend";
 import { Router } from "express";
 import { basicAuthController } from "../controllers";
 import { appLoggerService } from "../services";
