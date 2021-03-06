@@ -33,7 +33,7 @@
                 autocomplete="off"
                 :error="repeatPassword.error"
             />
-            <Button :disabled="!isValid">Submit</Button>
+            <Button @click="sendForm" :disabled="!isValid">Submit</Button>
         </form>
         <div class="btn__wrapper">
             <Button
@@ -78,7 +78,8 @@ import {
     isValid,
     pageTitle,
     changeView,
-    POPUP_NAME
+    POPUP_NAME,
+    sendForm,
 } from "@/compositions/auth";
 import { authService } from "@/services";
 import { TabUtils } from "@/utils/TabUtils";
@@ -95,7 +96,11 @@ const component = defineComponent({
                 const origin = location.href.split("?")[0];
                 const provider = queries.has("state") ? "facebook" : "google";
                 try {
-                    const { jwt } = await authService.thirdPartyConnect(code, origin, provider);
+                    const { jwt } = await authService.thirdPartyConnect(
+                        code,
+                        origin,
+                        provider
+                    );
                     msg = jwt;
                 } catch (err) {
                     console.warn(err);
@@ -104,7 +109,7 @@ const component = defineComponent({
             }
             TabUtils.broadcastMessageToAllTabs(POPUP_NAME, {
                 msg,
-                source: POPUP_NAME
+                source: POPUP_NAME,
             });
             window.close();
         }
@@ -119,9 +124,10 @@ const component = defineComponent({
             isSignup,
             isRecover,
             isValid,
-            pageTitle
+            pageTitle,
+            sendForm,
         };
-    }
+    },
 });
 
 export default component;
