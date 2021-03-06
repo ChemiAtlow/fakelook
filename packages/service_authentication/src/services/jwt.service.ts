@@ -2,15 +2,16 @@ import { AuthUser } from "@fakelook/common/src/models/interfaces";
 import { sign, verify } from "jsonwebtoken";
 import { appLoggerService } from ".";
 import { general } from "../constants";
+import { JWTInvalidError } from "../errors";
 
-export const createAccessToken = (refreshToken: string): string | undefined => {
+export const createAccessToken = (refreshToken: string): string => {
     const valid = verifyToken(refreshToken);
     if (valid) {
         appLoggerService.verbose("generate an access JWT token:");
         return sign(refreshToken, general.jwtSecret, { expiresIn: "15m" });
     } else {
         appLoggerService.verbose("failed to decode refresh token");
-        return undefined;
+        throw new JWTInvalidError(refreshToken);
     }
 };
 
