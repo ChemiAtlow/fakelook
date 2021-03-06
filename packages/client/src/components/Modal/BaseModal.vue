@@ -5,7 +5,7 @@
                 <slot name="title" />
             </div>
             <div class="modal-header__close" @click="close(false)">
-                <Icon icon="close" />
+                <Icon icon="close" color="green" :size="22" />
             </div>
         </header>
         <main className="modal-body">

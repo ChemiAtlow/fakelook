@@ -1,6 +1,6 @@
 <template>
-    <svg class="icon" viewBox="0 0 1024 1024">
-        <path :d="currentIcon" />
+    <svg class="icon" viewBox="0 0 1024 1024" :width="size" :height="size">
+        <path :d="currentIcon" :fill="color" />
     </svg>
 </template>
 
