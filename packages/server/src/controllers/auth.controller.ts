@@ -1,21 +1,28 @@
+import { Request, Response } from "express";
 import { authServer } from "../services/http.service";
 
-export const basicLogin = (...params: any[]) => {
-    authServer.post("/basic/login", params);
+export const basicLogin = async (req: Request, res: Response) => {
+    const authRes = await authServer.post("/basic/login", req.body);
+    res.send(authRes);
 };
-export const basicSignup = (...params: any[]) => {
-    authServer.post("/basic/signup", params);
+export const basicSignup = async (req: Request, res: Response) => {
+    const authRes = await authServer.post("/basic/signup", req);
+    res.send(authRes);
 };
-export const basicReqReset = (...params: any[]) => {
-    authServer.post("/basic/reset", params);
+export const basicReqReset = async (req: Request, res: Response) => {
+    const authRes = await authServer.post("/basic/reset", req);
+    res.send(authRes);
 };
-export const basicReset = (...params: any[]) => {
-    authServer.post("/basic/reset/:token", params);
+export const basicReset = async (req: Request, res: Response) => {
+    const authRes = await authServer.post("/basic/reset/:token", req);
+    res.send(authRes);
 };
 
-export const googleLogin = (...params: any[]) => {
-    authServer.post("/google/login", params);
+export const googleLogin = async (req: Request, res: Response) => {
+    const authRes = await authServer.post("/google/login", req);
+    res.send(authRes);
 };
-export const facebookLogin = (...params: any[]) => {
-    authServer.post("/facebook/login", params);
+export const facebookLogin = async (req: Request, res: Response) => {
+    const authRes = await authServer.post("/facebook/login", req);
+    res.send(authRes);
 };
