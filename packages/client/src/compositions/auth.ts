@@ -59,12 +59,14 @@ export const sendForm = async () => {
     };
     console.log("Form is being sent!", formUser);
     if (isLogin.value) {
-        const t = await authService.login(formUser);
-        console.log(t);
+        await authService.login(formUser);
+        //store jwts on local storage and cookies
     } else if (isSignup.value) {
-        authService.signup(formUser);
+        await authService.signup(formUser);
+        //is succesfull redirect to login
     } else if (isRecover.value) {
-        authService.requestPasswordReset(formUser);
+        await authService.requestPasswordReset(formUser);
+        //if successful redirect to reset
     }
 };
 
