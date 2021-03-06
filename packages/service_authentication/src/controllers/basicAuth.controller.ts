@@ -1,16 +1,10 @@
 import { appLoggerService, basicAuthService } from "../services";
 import { Request, Response } from "express";
 import { params } from "../models";
-import { constants } from "@fakelook/common";
-
-import {
-    AuthUserDto,
-    RequestPasswordResetDto,
-    ResetPasswordDto,
-} from "@fakelook/common/src/models/classes";
+import { constants, models } from "@fakelook/common";
 
 export const signup = async (
-    req: Request<never, AuthUserDto>,
+    req: Request<never, models.classes.AuthUserDto>,
     res: Response
 ) => {
     appLoggerService.info(`request ${req.id} started signup`);
@@ -29,7 +23,7 @@ export const signup = async (
 };
 
 export const login = async (
-    req: Request<never, any, AuthUserDto>,
+    req: Request<never, any, models.classes.AuthUserDto>,
     res: Response
 ) => {
     appLoggerService.info(`request ${req.id} started login`);
@@ -44,7 +38,7 @@ export const login = async (
 };
 
 export const requestPasswordReset = async (
-    req: Request<never, any, RequestPasswordResetDto>,
+    req: Request<never, any, models.classes.RequestPasswordResetDto>,
     res: Response
 ) => {
     appLoggerService.info(
@@ -58,7 +52,7 @@ export const requestPasswordReset = async (
 };
 
 export const resetPassword = async (
-    req: params.RequestWithToken<any, ResetPasswordDto>,
+    req: params.RequestWithToken<any, models.classes.ResetPasswordDto>,
     res: Response
 ) => {
     appLoggerService.info(`request ${req.id} started reseting password.`);
