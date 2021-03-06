@@ -4,6 +4,7 @@ import router from "@/router";
 import { openModal } from "./modal";
 import { ErrorModal } from "@/components/Modal";
 import { TabUtils } from "@/utils/TabUtils";
+import { authService } from "@/services";
 
 export const POPUP_NAME = "auth_pop";
 
@@ -15,14 +16,23 @@ export const password = reactive({ value: "", error: "" });
 export const repeatPassword = reactive({ value: "", error: "" });
 export const email = reactive({ value: "", error: "" });
 
-export const isCallback = computed(() => /auth_cb/.test(currentRoute.value.path));
+export const isCallback = computed(() =>
+    /auth_cb/.test(currentRoute.value.path)
+);
 export const isLogin = computed(() => /login/.test(currentRoute.value.path));
 export const isSignup = computed(() => /signup/.test(currentRoute.value.path));
-export const isRecover = computed(() => /recover/.test(currentRoute.value.path));
+export const isRecover = computed(() =>
+    /recover/.test(currentRoute.value.path)
+);
 
 export const isValid = computed(() => {
     if (isLogin.value) {
-        return !username.error && username.value && !password.error && password.value;
+        return (
+            !username.error &&
+            username.value &&
+            !password.error &&
+            password.value
+        );
     } else if (isRecover.value) {
         return !email.error && email.value;
     } else if (isSignup.value) {
@@ -41,19 +51,33 @@ export const isValid = computed(() => {
     }
 });
 
-export const sendForm = () => {
-    console.log("Form is being sent!");
+export const sendForm = async () => {
+    const formUser = {
+        username: username.value,
+        password: password.value,
+        email: email.value,
+    };
+    console.log("Form is being sent!", formUser);
+    if (isLogin.value) {
+        const t = await authService.login(formUser);
+        console.log(t);
+    } else if (isSignup.value) {
+        authService.signup(formUser);
+    } else if (isRecover.value) {
+        authService.requestPasswordReset(formUser);
+    }
 };
 
 watch(
     () => username.value,
-    val => {
+    (val) => {
         if (isLogin.value) {
             if (!validators.username.test(val) && !validators.email.test(val))
                 username.error = "This is not a valid username/email!";
             else username.error = "";
         } else {
-            if (!validators.username.test(val)) username.error = "username is not valid!";
+            if (!validators.username.test(val))
+                username.error = "username is not valid!";
             else username.error = "";
         }
     }
@@ -61,20 +85,24 @@ watch(
 
 watch(
     () => password.value,
-    val => {
-        if (!validators.password.test(val)) password.error = "password is not valid!";
+    (val) => {
+        if (!validators.password.test(val))
+            password.error = "password is not valid!";
         else password.error = "";
     }
 );
 
-watch([() => repeatPassword.value, () => password.value], ([repVal, pasVal]) => {
-    if (repVal !== pasVal) repeatPassword.error = "passwords do not match!";
-    else repeatPassword.error = "";
-});
+watch(
+    [() => repeatPassword.value, () => password.value],
+    ([repVal, pasVal]) => {
+        if (repVal !== pasVal) repeatPassword.error = "passwords do not match!";
+        else repeatPassword.error = "";
+    }
+);
 
 watch(
     () => email.value,
-    val => {
+    (val) => {
         if (!validators.email.test(val)) email.error = "email is not valid!";
         else email.error = "";
     }
@@ -99,7 +127,11 @@ export const changeView = (path: "login" | "signup" | "recover") => {
 let windowObjectReference: Window | null = null;
 let previousUrl: string | null = null;
 export const openPopup = (url: string) => {
-    if (!windowObjectReference || windowObjectReference.closed || previousUrl !== url) {
+    if (
+        !windowObjectReference ||
+        windowObjectReference.closed ||
+        previousUrl !== url
+    ) {
         /* if no window, or window was closed */
         const strWindowFeatures =
             "toolbar=no, menubar=no, width=600, height=700, top=100, left=100";
@@ -116,7 +148,7 @@ export const openPopup = (url: string) => {
     previousUrl = url;
 };
 
-TabUtils.onBroadcastMessage<"ERR" | any>(POPUP_NAME, payload => {
+TabUtils.onBroadcastMessage<"ERR" | any>(POPUP_NAME, (payload) => {
     if (payload === "ERR" || !payload.jwt) {
         openModal(ErrorModal, {
             title: "Error!",
