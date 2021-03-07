@@ -7,10 +7,20 @@ deployments:
       ./src
     vm_size:
       2GB
+    port_forwarding:
+      # docker-compose requires both ports to be the same. This is the port where your
+      # application is listening to.
+      80:80
     subdomain_port_mapping:
       # the docker-compose has multi containers, one container runs the on port 8080. "mongo" below can be any name and it represents
       # the subdomain itself.
-      - mongo:8080
+      - adminer:666
+      - mongo-express:777
+    subdomains:
+      MongoExpress:
+        - mongo-express
+      MySQL Admine:
+        - adminer
     ready_wait:
       # This will tell Squash to wait up to 20 min (1200 seconds) for a
       # success response from the app. The count down only starts after
