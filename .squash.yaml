@@ -1,0 +1,18 @@
+deployments:
+  Fakelook:
+    filename:
+      ./src/CRM/docker-compose.yml
+    # allow_private_ports: 5030,8060
+    context_path:
+      ./src
+    vm_size:
+      2GB
+    subdomain_port_mapping:
+      # the docker-compose has multi containers, one container runs the on port 8080. "mongo" below can be any name and it represents
+      # the subdomain itself.
+      - mongo:8080
+    ready_wait:
+      # This will tell Squash to wait up to 20 min (1200 seconds) for a
+      # success response from the app. The count down only starts after
+      # the build process is finished.
+      1200
