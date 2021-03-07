@@ -28,6 +28,7 @@
         ],
         "nohoist": [
             "client/**",
+            "common/**",
             "**/vue/**",
             "**/vue*",
             "**/vue*/**"
