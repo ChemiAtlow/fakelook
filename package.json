@@ -29,6 +29,9 @@
         "nohoist": [
             "client/**",
             "common/**",
+            "**/@typescript-eslint/parser/**",
+            "**/typescript/**",
+            "**/braces/**",
             "**/vue/**",
             "**/vue*",
             "**/vue*/**"
