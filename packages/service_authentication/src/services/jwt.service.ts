@@ -24,18 +24,16 @@ export const createRefreshToken = (user: AuthUser): string => {
 };
 
 export const verifyToken = (token: string): boolean => {
-    let res = false;
-    verify(token, general.jwtSecret, (err, decoded) => {
-        if (decoded) {
-            appLoggerService.verbose("decoded token successfuly:", {
-                decoded,
-            });
-            res = true;
-        } else {
-            appLoggerService.verbose("error at verifiying token:", {
-                err,
-            });
-        }
-    });
-    return res;
+    try {
+        const decoded = verify(token, general.jwtSecret);
+        appLoggerService.verbose("decoded token successfuly:", {
+            decoded,
+        });
+        return true;
+    } catch (error) {
+        appLoggerService.verbose("error at verifiying token:", {
+            error,
+        });
+        return false;
+    }
 };
