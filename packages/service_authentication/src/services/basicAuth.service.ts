@@ -7,7 +7,11 @@ import {
     getUserByUsername,
     getUserWithResetToken,
 } from "../dal";
-import { EmailTakenError, WrongCredentialsError } from "../errors";
+import {
+    EmailTakenError,
+    ThirdPartyProviderError,
+    WrongCredentialsError,
+} from "../errors";
 import { appLoggerService, emailService } from ".";
 import { createAccessToken, createRefreshToken } from "./jwt.service";
 
@@ -66,6 +70,15 @@ export const login = async ({
         );
         throw new WrongCredentialsError();
     }
+    //check if users provider is basic
+    const provider = userFromDb.provider;
+    if (provider != "basic") {
+        appLoggerService.info(
+            "attempt to login user failed - users from third party providers are restricted to those providers only",
+            { provider }
+        );
+        throw new ThirdPartyProviderError(provider);
+    }
     //check if encrypted password and password are matching
     const isMatchingPass = await compare(password, userFromDb.password);
     if (!isMatchingPass) {
@@ -103,6 +116,15 @@ export const requestPasswordReset = async ({
             }
         );
         throw new WrongCredentialsError();
+    }
+    //check if users provider is basic
+    const provider = userFromDb.provider;
+    if (provider != "basic") {
+        appLoggerService.info(
+            "attempt to login user failed - users from third party providers are restricted to those providers only",
+            { provider }
+        );
+        throw new ThirdPartyProviderError(provider);
     }
     //Try generating reset token
     try {
