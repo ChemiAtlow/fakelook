@@ -34,6 +34,8 @@ services:
             ADMINER_DEFAULT_SERVER: mysql
             ADMINER_PLUGINS: 'tables-filter tinymce'
             ADMINER_DESIGN: rmsoft_blue
+        depends_on: 
+            - mysql
         ports:
             - 666:8080
     mongo-express:
@@ -44,6 +46,8 @@ services:
         environment:
             ME_CONFIG_MONGODB_ADMINUSERNAME: fakelook_user
             ME_CONFIG_MONGODB_ADMINPASSWORD: greps_hazak
+        depends_on: 
+            - mongo
     client:
         build: 
             context: .
