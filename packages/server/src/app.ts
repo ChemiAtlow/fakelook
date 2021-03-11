@@ -5,12 +5,12 @@ import compression from "compression";
 import morgan from "morgan";
 import { json } from "body-parser";
 import { appLoggerService } from "./services";
-// import { questionsRoutes, authRoutes, testRoutes, reportRoutes, examRoutes } from "./routes";
 import { constants, utils } from "@fakelook/common";
 import { middleware } from "@fakelook/common/src/backend";
-import proxy from "express-http-proxy";
+import { authRoutes } from "./routes";
+//import proxy from "express-http-proxy";
 const { requestIdAssignMiddleware, errorMiddleware, notFoundMiddleware } = middleware;
-const { authDomain, authPort } = constants.URLS;
+//const { authDomain, authPort } = constants.URLS;
 
 morgan.token("id", function getId(req: Request) {
     return req.id;
@@ -28,10 +28,11 @@ app.use(
     })
 );
 
-
-app.use("/auth", proxy(`${authDomain}:${authPort}`));
-
 app.use(json());
+
+//app.use("/auth", proxy(`${authDomain}:${authPort}`));
+
+app.use("/auth", authRoutes)
 app.use(compression());
 
 app.use("*", notFoundMiddleware(appLoggerService));
