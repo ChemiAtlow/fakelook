@@ -12,8 +12,6 @@ deployments:
       # application is listening to.
       80:80
     subdomain_port_mapping:
-      # the docker-compose has multi containers, one container runs the on port 8080. "mongo" below can be any name and it represents
-      # the subdomain itself.
       - adminer:666
       - mongo-express:777
     subdomains:
