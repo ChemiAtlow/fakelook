@@ -1,6 +1,7 @@
 <template>
     <NavBar />
     <div class="page">
+        <h1>{{ p }}</h1>
         <template v-if="error">
             {{ error }}
         </template>
@@ -37,12 +38,13 @@ const component = defineComponent({
     name: "App",
     components: { NavBar, ModalHandler },
     setup() {
+        const p = process.env.VUE_APP_SERVER;
         const error = ref<Error>();
         onErrorCaptured(e => {
             error.value = e as Error;
             return true;
         });
-        return { error };
+        return { error, p };
     }
 });
 

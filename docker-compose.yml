@@ -64,7 +64,7 @@ services:
         build: 
             context: .
             dockerfile: ./docker/service_view.dockerfile
-    server:
+    api:
         build: 
             context: .
             dockerfile: ./docker/server.dockerfile
@@ -92,7 +92,7 @@ services:
         depends_on: 
             - adminer
             - mongo-express
-            - server
+            - api
 
 volumes:
     sqlData:
