@@ -31,7 +31,28 @@ const plugins = () => {
               }),
           ];
 };
-
+const baseOutput = {
+    path: currentServer,
+    filename: `dist/app.js`,
+};
+const baseResolve = {
+    extensions: [".ts", ".js"],
+    symlinks: false,
+    alias: {
+        "@fakelook/common/src": path.join(DIRS.COMMON_DIR, "src"),
+        "@fakelook/common": path.join(DIRS.COMMON_DIR, "src"),
+    },
+};
+const baseExternals = [
+    nodeExternals({
+        allowlist: ["@fakelook/common", "@fakelook/common/src/backend"],
+        modulesDir: path.resolve(__dirname, "..", "node_modules"),
+        additionalModuleDirs: [
+            path.resolve(currentServer, "node_modules"),
+            path.resolve(DIRS.COMMON_DIR, "node_modules"),
+        ],
+    }),
+];
 const DIRS = {
     PKG_DIR,
     COMMON_DIR: path.join(PKG_DIR, "common"),
@@ -53,10 +74,7 @@ exports.serversSettings = server => {
     const currentServer = DIRS[server] || SERVER_DIR;
     return {
         entry: path.join(currentServer, "src", "app.ts"),
-        output: {
-            path: currentServer,
-            filename: `dist/app.js`,
-        },
+        output: baseOutput,
         plugins: plugins(),
         module: {
             rules: [tsRule(DIRS.COMMON_DIR), tsRule(currentServer)],
@@ -65,23 +83,7 @@ exports.serversSettings = server => {
         mode: NODE_ENV,
         target: "node",
         watch: NODE_ENV === "development",
-        resolve: {
-            extensions: [".ts", ".js"],
-            symlinks: false,
-            alias: {
-                "@fakelook/common/src": path.join(DIRS.COMMON_DIR, "src"),
-                "@fakelook/common": path.join(DIRS.COMMON_DIR, "src"),
-            },
-        },
-        externals: [
-            nodeExternals({
-                allowlist: ["@fakelook/common", "@fakelook/common/src/backend"],
-                modulesDir: path.resolve(__dirname, "..", "node_modules"),
-                additionalModuleDirs: [
-                    path.resolve(currentServer, "node_modules"),
-                    path.resolve(DIRS.COMMON_DIR, "node_modules"),
-                ],
-            }),
-        ],
+        resolve: baseResolve,
+        externals: baseExternals,
     };
 };
