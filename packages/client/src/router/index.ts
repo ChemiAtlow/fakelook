@@ -2,6 +2,7 @@ import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 import { activeUser } from "@/compositions/authState";
 import { openModal } from "@/compositions/modal";
 import { MessageModal } from "@/components/Modal";
+import { refresh } from "@/services/auth.service";
 
 const routes: Array<RouteRecordRaw> = [
     {
@@ -32,6 +33,13 @@ const router = createRouter({
     history: createWebHistory(process.env.BASE_URL),
     routes,
 });
+
+const handler = (error: any) => { 
+    console.log(error);
+    refresh();
+};
+router.onError(handler);
+
 router.beforeEach((to, _, next) => {
     if (to.meta.requiresAuth && !activeUser.isConnected) {
         openModal(MessageModal, {
