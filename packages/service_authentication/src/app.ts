@@ -7,6 +7,7 @@ import { json } from "body-parser";
 import { appLoggerService } from "./services";
 import { basicAuthRoutes, googleRouter, facebookRouter } from "./routes";
 import { constants, middleware, utils } from "@fakelook/common";
+import { tokenRouter } from "./routes/token.routes";
 const { requestIdAssignMiddleware, errorMiddleware, notFoundMiddleware } = middleware;
 
 morgan.token("id", function getId(req: Request) {
@@ -30,6 +31,8 @@ app.use(
 );
 app.use(json());
 app.use(compression());
+
+app.use("/token", tokenRouter);
 
 app.use("/basic", basicAuthRoutes);
 app.use("/google", googleRouter);
