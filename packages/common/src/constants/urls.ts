@@ -14,7 +14,8 @@ const {
     POSTS_PORT = 4447,
     POSTS_DOMAIN = fallbackDomain,
 } = process.env;
-const isSquash = Boolean(process.env.SQUASH_DOMAIN);
+const isSquash = Boolean(SQUASH_DOMAIN);
+console.log("TKDOP", isSquash, process.env.SQUASH_DOMAIN);
 export const URLS = {
     //UI
     clientPort: isSquash ? 80 : CLIENT_PORT,

@@ -70,11 +70,12 @@ services:
             dockerfile: ./docker/server.dockerfile
         ports: 
             - 4000:4000
-        environment: 
-            - AUTH_DOMAIN:auth
-            - IDENTITY_DOMAIN:identity
-            - POSTS_DOMAIN:posts
-            - VIEW_DOMAIN:view
+        environment:
+            SQUASH_DOMAIN: ${SQUASH_DOMAIN}
+            AUTH_DOMAIN: auth
+            IDENTITY_DOMAIN: identity
+            POSTS_DOMAIN: posts
+            VIEW_DOMAIN: view
         depends_on: 
             - auth
             - identity
@@ -86,6 +87,8 @@ services:
             dockerfile: ./docker/client.dockerfile
         ports: 
             - 80:80
+        environment:
+            SQUASH_DOMAIN: ${SQUASH_DOMAIN}
         depends_on: 
             - adminer
             - mongo-express
