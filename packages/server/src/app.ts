@@ -5,12 +5,15 @@ import compression from "compression";
 import morgan from "morgan";
 import { json } from "body-parser";
 import { appLoggerService } from "./services";
-// import { questionsRoutes, authRoutes, testRoutes, reportRoutes, examRoutes } from "./routes";
 import { constants, middleware, utils } from "@fakelook/common";
-import { authRoutes } from "./routes";
-//import proxy from "express-http-proxy";
-const { requestIdAssignMiddleware, errorMiddleware, notFoundMiddleware } = middleware;
-//const { authDomain, authPort } = constants.URLS;
+import { authRoutes, /* identityRoutes */ } from "./routes";
+import { authMiddleware } from "./middleware";
+
+const {
+    requestIdAssignMiddleware,
+    errorMiddleware,
+    notFoundMiddleware,
+} = middleware;
 
 morgan.token("id", function getId(req: Request) {
     return req.id;
@@ -21,18 +24,23 @@ const app = express();
 
 app.use(requestIdAssignMiddleware(appLoggerService));
 app.use(helmet());
-app.use(cors());
+app.use(cors({ origin: "http://localhost:8080", credentials: true }));
 app.use(
-    morgan(":id :method :url :status :response-time ms - :res[content-length]", {
-        stream: appLoggerService.logStream,
-    })
+    morgan(
+        ":method - Req :id :url :status :response-time ms - :res[content-length]",
+        {
+            stream: appLoggerService.logStream,
+        }
+    )
 );
 
 app.use(json());
 
-//app.use("/auth", proxy(`${authDomain}:${authPort}`));
+app.use("/auth", authRoutes);
+app.use(authMiddleware);
 
-app.use("/auth", authRoutes)
+//app.use("/identity", identityRoutes)
+
 app.use(compression());
 
 app.use("*", notFoundMiddleware(appLoggerService));
@@ -41,5 +49,7 @@ app.use(errorMiddleware(appLoggerService));
 const { serverDomain, serverPort } = constants.URLS;
 
 app.listen(serverPort, () =>
-    appLoggerService.debug(`Fakelook server is running at ${serverDomain}:${serverPort}`)
+    appLoggerService.debug(
+        `Fakelook server is running at ${serverDomain}:${serverPort}`
+    )
 );
