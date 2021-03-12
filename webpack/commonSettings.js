@@ -14,13 +14,30 @@ const tsRule = pathName => ({
         configFile: path.join(pathName, "tsconfig.json"),
     },
 });
+const plugins = () => {
+    const basePlugins = [new HotModuleReplacementPlugin()];
+    return NODE_ENV === "production"
+        ? basePlugins
+        : [
+              ...basePlugins,
+              new ProgressPlugin(),
+              new WebpackShellPlugin({
+                  onBuildEnd: { scripts: ["npm run execute"] },
+              }),
+              new RemovePlugin({
+                  before: {
+                      include: [path.join(currentServer, "dist")],
+                  },
+              }),
+          ];
+};
 
 const DIRS = {
     PKG_DIR,
     COMMON_DIR: path.join(PKG_DIR, "common"),
     SERVER_DIR: path.join(PKG_DIR, "server"),
     AUTH_DIR: path.join(PKG_DIR, "service_authentication"),
-    IDENTITY_DIR:  path.join(PKG_DIR, "service_identity"),
+    IDENTITY_DIR: path.join(PKG_DIR, "service_identity"),
     POSTS_DIR: path.join(PKG_DIR, "service_posts"),
     VIEW_DIR: path.join(PKG_DIR, "service_view"),
 };
@@ -28,8 +45,8 @@ const DIRS = {
 exports.DIRS = DIRS;
 
 /**
- * 
- * @param {keyof typeof DIRS} server 
+ *
+ * @param {keyof typeof DIRS} server
  * @returns webpack setting.
  */
 exports.serversSettings = server => {
@@ -40,18 +57,7 @@ exports.serversSettings = server => {
             path: currentServer,
             filename: `dist/app.js`,
         },
-        plugins: [
-            new ProgressPlugin(),
-            new HotModuleReplacementPlugin(),
-            new WebpackShellPlugin({
-                onBuildEnd: { scripts: NODE_ENV === "development" ? ["npm run execute"] : [] },
-            }),
-            new RemovePlugin({
-                before: {
-                    include: [path.join(currentServer, "dist")],
-                },
-            }),
-        ],
+        plugins: plugins(),
         module: {
             rules: [tsRule(DIRS.COMMON_DIR), tsRule(currentServer)],
         },
