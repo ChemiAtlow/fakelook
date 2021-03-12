@@ -14,7 +14,7 @@ const tsRule = pathName => ({
         configFile: path.join(pathName, "tsconfig.json"),
     },
 });
-const plugins = () => {
+const plugins = currentServer => {
     const basePlugins = [new HotModuleReplacementPlugin()];
     return NODE_ENV === "production"
         ? basePlugins
@@ -31,10 +31,10 @@ const plugins = () => {
               }),
           ];
 };
-const baseOutput = {
+const baseOutput = currentServer => ({
     path: currentServer,
     filename: `dist/app.js`,
-};
+});
 const baseResolve = {
     extensions: [".ts", ".js"],
     symlinks: false,
@@ -43,7 +43,7 @@ const baseResolve = {
         "@fakelook/common": path.join(DIRS.COMMON_DIR, "src"),
     },
 };
-const baseExternals = [
+const baseExternals = currentServer => [
     nodeExternals({
         allowlist: ["@fakelook/common", "@fakelook/common/src/backend"],
         modulesDir: path.resolve(__dirname, "..", "node_modules"),
@@ -71,11 +71,11 @@ exports.DIRS = DIRS;
  * @returns webpack setting.
  */
 exports.serversSettings = server => {
-    const currentServer = DIRS[server] || SERVER_DIR;
+    const currentServer = DIRS[server] || DIRS.SERVER_DIR;
     return {
         entry: path.join(currentServer, "src", "app.ts"),
-        output: baseOutput,
-        plugins: plugins(),
+        output: baseOutput(currentServer),
+        plugins: plugins(currentServer),
         module: {
             rules: [tsRule(DIRS.COMMON_DIR), tsRule(currentServer)],
         },
@@ -84,6 +84,6 @@ exports.serversSettings = server => {
         target: "node",
         watch: NODE_ENV === "development",
         resolve: baseResolve,
-        externals: baseExternals,
+        externals: baseExternals(currentServer),
     };
 };
