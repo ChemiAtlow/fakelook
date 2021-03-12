@@ -31,7 +31,7 @@ export const setUser = ({
     expireTime,
     jwt,
     userInfo,
-}: Pick<Required<AuthData>, "expireTime" | "jwt" | "userInfo">): void => {
+}: Pick<AuthData, "expireTime" | "jwt" | "userInfo">): void => {
     localStorage.setItem(AUTH_KEY, JSON.stringify({ jwt, expireTime }));
     activeUser.userInfo = userInfo;
     activeUser.expireTime = expireTime;
