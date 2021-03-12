@@ -52,7 +52,7 @@ services:
         build: 
             context: .
             dockerfile: ./docker/service_auth.dockerfile
-        env_file: ./environments/auth.env
+        env_file: ./environment/auth.env
     identity:
         build: 
             context: .
