@@ -27,6 +27,7 @@
         "@typescript-eslint/parser": "^4.4.1",
         "braces": "^2.3.2",
         "eslint": "^7.9.0",
+        "fill-range": "7.0.1",
         "nodemon": "^2.0.4",
         "rimraf": "^3.0.2",
         "typescript": "^4.2.2"
