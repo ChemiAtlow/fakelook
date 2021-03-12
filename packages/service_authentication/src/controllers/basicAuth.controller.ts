@@ -28,9 +28,9 @@ export const login = async (
 ) => {
     appLoggerService.info(`request ${req.id} started login`);
     try {
-        const jwts = await basicAuthService.login(req.body);
+        const tokens = await basicAuthService.login(req.body);
         appLoggerService.info(`request ${req.id} login success`);
-        res.status(constants.HTTPStatuses.ok).send(jwts);
+        res.status(constants.HTTPStatuses.ok).send(tokens);
     } catch (error) {
         appLoggerService.info(`request ${req.id} login failed: ${error}`);
         res.status(constants.HTTPStatuses.unprocessableEntity).send(error);
