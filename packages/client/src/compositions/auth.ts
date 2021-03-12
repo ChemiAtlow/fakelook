@@ -5,6 +5,7 @@ import { openModal } from "./modal";
 import { ErrorModal } from "@/components/Modal";
 import { TabUtils } from "@/utils/TabUtils";
 import { authService } from "@/services";
+import { setUser } from "./authState";
 
 export const POPUP_NAME = "auth_pop";
 
@@ -59,8 +60,9 @@ export const sendForm = async () => {
     };
     console.log("Form is being sent!", formUser);
     if (isLogin.value) {
-        await authService.login(formUser);
+        const user = await authService.login(formUser);
         //store jwts on local storage and cookies
+        setUser(user);
     } else if (isSignup.value) {
         await authService.signup(formUser);
         //is succesfull redirect to login
@@ -151,7 +153,7 @@ export const openPopup = (url: string) => {
 };
 
 TabUtils.onBroadcastMessage<"ERR" | any>(POPUP_NAME, (payload) => {
-    if (payload === "ERR" || !payload.jwt) {
+    if (payload === "ERR" || !payload.msg) {
         openModal(ErrorModal, {
             title: "Error!",
             message:
@@ -159,6 +161,8 @@ TabUtils.onBroadcastMessage<"ERR" | any>(POPUP_NAME, (payload) => {
         });
     } else {
         // Got the JWT - do something
-        console.log(payload);
+        const jwt = payload.msg;
+        const user = { jwt };
+        setUser(user);
     }
 });
