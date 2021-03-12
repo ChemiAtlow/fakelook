@@ -65,7 +65,7 @@ export const loginWithFBUser = async (fbUser: FacebookUser) => {
         await emailService.sendSignUpEmail(email);
     }
 
-    if(user.provider != "facebook"){
+    if(user.provider !== "facebook"){
         throw new EmailTakenError(user.email);
     }
 

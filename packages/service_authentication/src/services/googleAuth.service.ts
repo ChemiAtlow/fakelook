@@ -66,7 +66,7 @@ export const loginWithGoogleUser = async (googleUser: GoogleUser) => {
         await emailService.sendSignUpEmail(email);
     }
 
-    if(user.provider != "google"){
+    if(user.provider !== "google"){
         throw new EmailTakenError(user.email);
     }
 

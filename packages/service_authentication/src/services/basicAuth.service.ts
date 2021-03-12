@@ -72,7 +72,7 @@ export const login = async ({
     }
     //check if users provider is basic
     const provider = userFromDb.provider;
-    if (provider != "basic") {
+    if (provider !== "basic") {
         appLoggerService.info(
             "attempt to login user failed - users from third party providers are restricted to those providers only",
             { provider }
