@@ -44,7 +44,7 @@ exports.serversSettings = server => {
             new ProgressPlugin(),
             new HotModuleReplacementPlugin(),
             new WebpackShellPlugin({
-                onBuildEnd: { scripts: NODE_ENV === "development" ? ["yarn execute"] : [] },
+                onBuildEnd: { scripts: NODE_ENV === "development" ? ["npm run execute"] : [] },
             }),
             new RemovePlugin({
                 before: {
@@ -69,9 +69,12 @@ exports.serversSettings = server => {
         },
         externals: [
             nodeExternals({
-                allowlist: ["@fakelook/common"],
+                allowlist: ["@fakelook/common", "@fakelook/common/src/backend"],
                 modulesDir: path.resolve(__dirname, "..", "node_modules"),
-                additionalModuleDirs: [path.resolve(currentServer, "node_modules"),path.resolve(DIRS.COMMON_DIR, "node_modules"),],
+                additionalModuleDirs: [
+                    path.resolve(currentServer, "node_modules"),
+                    path.resolve(DIRS.COMMON_DIR, "node_modules"),
+                ],
             }),
         ],
     };
