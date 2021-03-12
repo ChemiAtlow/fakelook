@@ -52,6 +52,7 @@ services:
         build: 
             context: .
             dockerfile: ./docker/service_auth.dockerfile
+        env_file: ./environments/auth.env
     identity:
         build: 
             context: .
@@ -64,7 +65,7 @@ services:
         build: 
             context: .
             dockerfile: ./docker/service_view.dockerfile
-    api:
+    server:
         build: 
             context: .
             dockerfile: ./docker/server.dockerfile
@@ -92,7 +93,7 @@ services:
         depends_on: 
             - adminer
             - mongo-express
-            - api
+            - server
 
 volumes:
     sqlData:
