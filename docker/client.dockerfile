@@ -3,7 +3,7 @@ WORKDIR /app
 COPY ./packages/client/package.json ./packages/client/package.json
 COPY ./packages/common/package.json ./packages/common/package.json
 COPY ./package.json ./package-lock.json ./
-RUN npm ci
+RUN npm ci --legacy-peer-deps
 
 COPY ./packages/client ./packages/client
 COPY ./packages/common ./packages/common
