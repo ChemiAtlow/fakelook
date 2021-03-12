@@ -22,7 +22,7 @@ COPY --from=build /app/packages/service_authentication/dist ./packages/service_a
 ENV NODE_ENV production
 RUN npm ci --production
 WORKDIR /app/packages/service_authentication
-ARG DEFAULT_PORT=4000
-ENV PORT ${DEFAULT_PORT}
-EXPOSE ${PORT}
+ARG DEFAULT_PORT=4441
+ENV AUTH_PORT ${DEFAULT_PORT}
+EXPOSE ${AUTH_PORT}
 CMD [ "node", "./dist/app" ]

@@ -1,20 +1,37 @@
+const fallbackDomain = "http://localhost";
+const {
+    SQUASH_DOMAIN,
+    CLIENT_DOMAIN = fallbackDomain,
+    CLIENT_PORT = 3000,
+    PORT = 4000,
+    SERVER_DOMAIN = fallbackDomain,
+    AUTH_PORT = 4441,
+    AUTH_DOMAIN = fallbackDomain,
+    IDENTITY_PORT = 4443,
+    IDENTITY_DOMAIN = fallbackDomain,
+    VIEW_PORT = 4445,
+    VIEW_DOMAIN = fallbackDomain,
+    POSTS_PORT = 4447,
+    POSTS_DOMAIN = fallbackDomain,
+} = process.env;
+const isSquash = Boolean(process.env.SQUASH_DOMAIN);
 export const URLS = {
     //UI
-    clientPort: process.env.CLIENT_PORT ?? 3000,
-    clientDomain: process.env.CLIENT_DOMAIN ?? "http://localhost",
+    clientPort: isSquash ? 80 : CLIENT_PORT,
+    clientDomain: isSquash ? `http://${SQUASH_DOMAIN}` : CLIENT_DOMAIN,
     //SERVER
-    serverPort: process.env.PORT ?? 4000,
-    serverDomain: process.env.SERVER_DOMAIN ?? "http://localhost",
-    //Auth                                                                                                     
-    authPort: process.env.AUTH_PORT ?? 4441,
-    authDomain: process.env.AUTH_DOMAIN ?? "http://localhost",
+    serverPort: isSquash ? 80 : PORT,
+    serverDomain: isSquash ? `https://api--${SQUASH_DOMAIN}` : SERVER_DOMAIN,
+    //Auth
+    authPort: AUTH_PORT,
+    authDomain: AUTH_DOMAIN,
     //Identity
-    identityPort: process.env.IDENTITY_PORT ?? 4443,
-    identityDomain: process.env.IDENTITY_DOMAIN ?? "http://localhost",
+    identityPort: IDENTITY_PORT,
+    identityDomain: IDENTITY_DOMAIN,
     //View
-    viewPort: process.env.VIEW_PORT ?? 4445,
-    viewDomain: process.env.VIEW_DOMAIN ?? "http://localhost",
+    viewPort: VIEW_PORT,
+    viewDomain: VIEW_DOMAIN,
     //Posts
-    postsPort: process.env.POSTS_ORT ?? 4447,
-    postsDomain: process.env.POSTS_DOMAIN ?? "http://localhost",
+    postsPort: POSTS_PORT,
+    postsDomain: POSTS_DOMAIN,
 };

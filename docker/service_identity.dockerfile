@@ -22,7 +22,7 @@ COPY --from=build /app/packages/service_identity/dist ./packages/service_identit
 ENV NODE_ENV production
 RUN npm ci --production
 WORKDIR /app/packages/service_identity
-ARG DEFAULT_PORT=4000
-ENV PORT ${DEFAULT_PORT}
-EXPOSE ${PORT}
+ARG DEFAULT_PORT=4443
+ENV IDENTITY_PORT ${DEFAULT_PORT}
+EXPOSE ${IDENTITY_PORT}
 CMD [ "node", "./dist/app" ]

@@ -22,7 +22,7 @@ COPY --from=build /app/packages/service_view/dist ./packages/service_view/dist
 ENV NODE_ENV production
 RUN npm ci --production
 WORKDIR /app/packages/service_view
-ARG DEFAULT_PORT=4000
-ENV PORT ${DEFAULT_PORT}
-EXPOSE ${PORT}
+ARG DEFAULT_PORT=4445
+ENV VIEW_PORT ${DEFAULT_PORT}
+EXPOSE ${VIEW_PORT}
 CMD [ "node", "./dist/app" ]
