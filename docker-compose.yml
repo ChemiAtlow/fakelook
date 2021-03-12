@@ -48,6 +48,33 @@ services:
             ME_CONFIG_MONGODB_ADMINPASSWORD: greps_hazak
         depends_on: 
             - mongo
+    auth:
+        build: 
+            context: .
+            dockerfile: ./docker/service_auth.dockerfile
+    identity:
+        build: 
+            context: .
+            dockerfile: ./docker/service_identity.dockerfile
+    posts:
+        build: 
+            context: .
+            dockerfile: ./docker/service_posts.dockerfile
+    view:
+        build: 
+            context: .
+            dockerfile: ./docker/service_view.dockerfile
+    server:
+        build: 
+            context: .
+            dockerfile: ./docker/server.dockerfile
+        ports: 
+            - 4000:4000
+        depends_on: 
+            - auth
+            - identity
+            - posts
+            - view
     client:
         build: 
             context: .
@@ -57,8 +84,7 @@ services:
         depends_on: 
             - adminer
             - mongo-express
-        
-
+            - server
 
 volumes:
     sqlData:
