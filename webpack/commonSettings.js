@@ -79,7 +79,7 @@ exports.serversSettings = server => {
         module: {
             rules: [tsRule(DIRS.COMMON_DIR), tsRule(currentServer)],
         },
-        devtool: "source-map",
+        devtool: NODE_ENV === "production" ? "source-map" : "cheap-module-eval-source-map",
         mode: NODE_ENV,
         target: "node",
         watch: NODE_ENV === "development",
