@@ -10,3 +10,5 @@ authRoutes.post("/basic/reset/:token", authController.basicReset);
 
 authRoutes.post("/google/login", authController.googleLogin);
 authRoutes.post("/facebook/login", authController.facebookLogin);
+
+authRoutes.post("/token/refresh", authController.exchangeRefreshForAccess);
