@@ -2,9 +2,8 @@ FROM node:15.8.0-alpine as build-stage
 WORKDIR /app
 COPY ./packages/client/package.json ./packages/client/package.json
 COPY ./packages/common/package.json ./packages/common/package.json
-COPY ./package.json yarn.lock ./
-RUN yarn --frozen-lockfile || true
-RUN yarn --frozen-lockfile
+COPY ./package*.json ./
+RUN npm ci
 
 COPY ./packages/client ./packages/client
 COPY ./packages/common ./packages/common
