@@ -70,6 +70,11 @@ services:
             dockerfile: ./docker/server.dockerfile
         ports: 
             - 4000:4000
+        environment: 
+            - AUTH_DOMAIN:auth
+            - IDENTITY_DOMAIN:identity
+            - POSTS_DOMAIN:posts
+            - VIEW_DOMAIN:view
         depends_on: 
             - auth
             - identity
