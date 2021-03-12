@@ -6,6 +6,17 @@ const { HotModuleReplacementPlugin, ProgressPlugin } = require("webpack");
 const { NODE_ENV = "production" } = process.env;
 const PKG_DIR = path.join(__dirname, "..", "packages");
 
+
+const DIRS = {
+    PKG_DIR,
+    COMMON_DIR: path.join(PKG_DIR, "common"),
+    SERVER_DIR: path.join(PKG_DIR, "server"),
+    AUTH_DIR: path.join(PKG_DIR, "service_authentication"),
+    IDENTITY_DIR: path.join(PKG_DIR, "service_identity"),
+    POSTS_DIR: path.join(PKG_DIR, "service_posts"),
+    VIEW_DIR: path.join(PKG_DIR, "service_view"),
+};
+
 const tsRule = pathName => ({
     test: /\.ts$/,
     loader: "ts-loader",
@@ -53,17 +64,6 @@ const baseExternals = currentServer => [
         ],
     }),
 ];
-const DIRS = {
-    PKG_DIR,
-    COMMON_DIR: path.join(PKG_DIR, "common"),
-    SERVER_DIR: path.join(PKG_DIR, "server"),
-    AUTH_DIR: path.join(PKG_DIR, "service_authentication"),
-    IDENTITY_DIR: path.join(PKG_DIR, "service_identity"),
-    POSTS_DIR: path.join(PKG_DIR, "service_posts"),
-    VIEW_DIR: path.join(PKG_DIR, "service_view"),
-};
-
-exports.DIRS = DIRS;
 
 /**
  *
