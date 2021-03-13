@@ -15,6 +15,6 @@ RUN npm run build
 FROM nginx as production-stage
 COPY --from=build-stage /app/packages/client/dist /app
 COPY ./packages/client/entrypoint.sh .
+RUN chmod +x ./entrypoint.sh
+RUN ./entrypoint.sh
 COPY ./packages/client/nginx.conf /etc/nginx/nginx.conf
-RUN chmod +x /entrypoint.sh
-ENTRYPOINT ["/entrypoint.sh"]
