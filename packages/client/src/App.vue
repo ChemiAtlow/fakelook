@@ -1,13 +1,6 @@
 <template>
     <NavBar />
     <div class="page">
-        <h1>{{ a }}</h1>
-        <h1>{{ b }}</h1>
-        <h1>{{ c }}</h1>
-        <h1>{{ d }}</h1>
-        <h1>{{ e }}</h1>
-        <h1>{{ f }}</h1>
-        <h1>{{ g }}</h1>
         <template v-if="error">
             {{ error }}
         </template>
@@ -44,19 +37,12 @@ const component = defineComponent({
     name: "App",
     components: { NavBar, ModalHandler },
     setup() {
-        const a = process.env.VUE_APP_FOO;
-        const b = process.env.VUE_APP_BAR;
-        const c = process.env.VUE_APP_BAZ;
-        const d = process.env.VUE_APP_LALA;
-        const e = process.env.VUE_APP_LALALA;
-        const f = process.env.VUE_APP_SERVER_A;
-        const g = process.env.VUE_APP_SERVER;
         const error = ref<Error>();
         onErrorCaptured(e => {
             error.value = e as Error;
             return true;
         });
-        return { error, a,b,c,d,e,f,g };
+        return { error };
     }
 });
 

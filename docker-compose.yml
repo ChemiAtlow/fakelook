@@ -89,12 +89,6 @@ services:
         ports: 
             - 80:80
         environment:
-            VUE_APP_FOO: "123"
-            VUE_APP_BAR: "${SQUASH_DOMAIN}"
-            VUE_APP_BAZ: "$SQUASH_DOMAIN"
-            VUE_APP_LALA: $SQUASH_DOMAIN
-            VUE_APP_LALALA: ${SQUASH_DOMAIN}
-            VUE_APP_SERVER_A: "http://api--${SQUASH_DOMAIN}"
             VUE_APP_SERVER: http://api--${SQUASH_DOMAIN}
         depends_on: 
             - adminer
