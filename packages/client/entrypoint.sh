@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# ROOT_DIR=/app
+ROOT_DIR=/app
 
 echo "Replacing env constants in JS"
 
