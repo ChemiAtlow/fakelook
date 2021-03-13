@@ -5,6 +5,8 @@ const RemovePlugin = require("remove-files-webpack-plugin");
 const { HotModuleReplacementPlugin, ProgressPlugin } = require("webpack");
 const { NODE_ENV = "production" } = process.env;
 const PKG_DIR = path.join(__dirname, "..", "packages");
+const IS_DEV = NODE_ENV === "development";
+const IS_PROD = NODE_ENV === "production";
 
 
 const DIRS = {
@@ -27,7 +29,7 @@ const tsRule = pathName => ({
 });
 const plugins = currentServer => {
     const basePlugins = [new HotModuleReplacementPlugin()];
-    return NODE_ENV === "production"
+    return IS_PROD
         ? basePlugins
         : [
               ...basePlugins,
@@ -79,10 +81,11 @@ exports.serversSettings = server => {
         module: {
             rules: [tsRule(DIRS.COMMON_DIR), tsRule(currentServer)],
         },
-        devtool: NODE_ENV === "production" ? "source-map" : "cheap-module-eval-source-map",
+        devtool: IS_PROD ? "source-map" : "cheap-module-eval-source-map",
         mode: NODE_ENV,
         target: "node",
-        watch: NODE_ENV === "development",
+        watch: IS_DEV,
+        stats: IS_PROD ? "errors-only" : "normal",
         resolve: baseResolve,
         externals: baseExternals(currentServer),
     };
