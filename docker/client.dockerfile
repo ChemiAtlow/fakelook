@@ -13,9 +13,8 @@ WORKDIR /app/packages/client
 RUN npm run build
 
 FROM nginx as production-stage
-# RUN mkdir /app
 COPY --from=build-stage /app/packages/client/dist /app
-RUN chmod +x /entrypoint.sh
 COPY ./packages/client/entrypoint.sh .
 COPY ./packages/client/nginx.conf /etc/nginx/nginx.conf
+RUN chmod +x /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]

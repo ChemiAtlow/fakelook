@@ -8,10 +8,10 @@ deployments:
       2GB
     port_forwarding:
       80:80
-    subdomain_port_mapping:
-      - adminer:666
-      - mongo-express:777
-      - api:4000
+    # subdomain_port_mapping:
+    #   - adminer:666
+    #   - mongo-express:777
+    #   - api:4000
     subdomains:
       MongoExpress:
         - mongo-express
