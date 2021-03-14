@@ -55,8 +55,13 @@ services:
     auth:
         build: 
             context: .
-            dockerfile: ./docker/service_auth.dockerfile
+            dockerfile: ./docker/backend.dockerfile
+            args:
+                SERVICE_NAME: service_authentication
         env_file: ./environment/auth.env
+        depends_on: 
+            - mysql
+        command: ["../../wait-for-it.sh", "mysql:3306", "-t 0", "--", "node", "./dist/app"]
     identity:
         build: 
             context: .
@@ -93,7 +98,7 @@ services:
             context: .
             dockerfile: ./docker/client.dockerfile
             args:
-                VUE_APP_SERVER: http://api--${SQUASH_DOMAIN}
+                VUE_APP_SERVER: https://api--${SQUASH_DOMAIN}
         ports: 
             - 80:80
         depends_on: 
