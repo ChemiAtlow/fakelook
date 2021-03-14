@@ -64,7 +64,7 @@ services:
             - ./environment/urls.env
         depends_on: 
             - mysql
-        command: ["../../wait-for-it.sh", "mysql:3306", "-t 0", "--", "node", "./dist/app"]
+        command: sh -c '../../wait-for mysql:3306 -t 0 -- node ./dist/app'
     identity:
         build: 
             context: .
@@ -86,7 +86,6 @@ services:
             args:
                 SERVICE_NAME: service_view
                 DEFAULT_PORT: 4445
-
     server:
         build: 
             context: .
@@ -95,10 +94,6 @@ services:
             - 4000:4000
         environment:
             SQUASH_DOMAIN: ${SQUASH_DOMAIN}
-            AUTH_DOMAIN: auth
-            IDENTITY_DOMAIN: identity
-            POSTS_DOMAIN: posts
-            VIEW_DOMAIN: view
         env_file: 
             - ./environment/urls.env
         depends_on: 
