@@ -58,7 +58,10 @@ services:
             dockerfile: ./docker/backend.dockerfile
             args:
                 SERVICE_NAME: service_authentication
-        env_file: ./environment/auth.env
+                DEFAULT_PORT: 4441
+        env_file:
+            - ./environment/auth.env
+            - ./environment/urls.env
         depends_on: 
             - mysql
         command: ["../../wait-for-it.sh", "mysql:3306", "-t 0", "--", "node", "./dist/app"]
@@ -68,14 +71,22 @@ services:
             dockerfile: ./docker/backend.dockerfile
             args:
                 SERVICE_NAME: service_identity
+                DEFAULT_PORT: 4443
     posts:
         build: 
             context: .
-            dockerfile: ./docker/service_posts.dockerfile
+            dockerfile: ./docker/backend.dockerfile
+            args:
+                SERVICE_NAME: service_posts
+                DEFAULT_PORT: 4447
     view:
         build: 
             context: .
-            dockerfile: ./docker/service_view.dockerfile
+            dockerfile: ./docker/backend.dockerfile
+            args:
+                SERVICE_NAME: service_view
+                DEFAULT_PORT: 4445
+
     server:
         build: 
             context: .
@@ -88,6 +99,8 @@ services:
             IDENTITY_DOMAIN: identity
             POSTS_DOMAIN: posts
             VIEW_DOMAIN: view
+        env_file: 
+            - ./environment/urls.env
         depends_on: 
             - auth
             - identity
