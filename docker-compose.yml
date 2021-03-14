@@ -13,6 +13,8 @@ services:
             MYSQL_ROOT_PASSWORD: "lalala"
         ports:
             - 3306:3306
+        expose: 
+            - "3306"
         volumes:
             - sqlData:/var/lib/mysql
         expose:
@@ -25,6 +27,8 @@ services:
             MONGO_INITDB_ROOT_PASSWORD: greps_hazak
         ports:
             - 27017:27017
+        expose: 
+            - "27017"
         volumes: 
             - mongoData:/data/db
     adminer:
