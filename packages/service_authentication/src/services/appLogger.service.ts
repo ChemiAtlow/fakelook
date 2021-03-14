@@ -11,7 +11,7 @@ const appLogger = createLogger({
     transports: [
         new transports.File({
             level: 'verbose',
-            filename: 'info.log',
+            filename: 'auth.log',
             dirname: logDirectory,
             handleExceptions: true,
             format: combine(timestamp(), json()),
