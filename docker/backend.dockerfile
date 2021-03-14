@@ -17,6 +17,7 @@ RUN npm run build
 FROM node:15.8.0-alpine as prod
 WORKDIR /app
 ARG SERVICE_NAME
+COPY ./wait-for-it.sh .
 COPY ./packages/${SERVICE_NAME}/package.json ./packages/${SERVICE_NAME}/package.json
 COPY ./packages/common/package.json ./packages/common/package.json
 COPY package*.json ./
