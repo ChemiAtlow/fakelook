@@ -10,17 +10,15 @@ export const genrateJWT = (data: any, expiresIn: string | number) => {
     return jwt;
 };
 
-export const createAccessToken = (refreshToken: {
-    refreshToken: string;
-}): string => {
-    const valid = verifyToken(refreshToken.refreshToken);
+export const createAccessToken = (refreshToken: string): string => {
+    const valid = verifyToken(refreshToken);
     if (valid) {
         appLoggerService.verbose("generate an access JWT token");
-        const jwt = genrateJWT(refreshToken, "2m");
+        const jwt = genrateJWT({ refreshToken }, "2m");
         return jwt;
     } else {
         appLoggerService.verbose("failed to decode refresh token");
-        throw new JWTInvalidError(refreshToken.refreshToken);
+        throw new JWTInvalidError(refreshToken);
     }
 };
 
@@ -47,20 +45,17 @@ export const verifyToken = (token: string): boolean => {
 };
 
 export const decodeToken = (token: string): string | object => {
-    let data: string | object = "";
     try {
         const decoded = verify(token, general.jwtSecret);
-        if (!decoded) data = {};
         appLoggerService.verbose(`decoded token successfuly: ${token}`, {
             decoded,
         });
-        data = decoded;
+        return decoded;
     } catch (error) {
         appLoggerService.verbose("error at decoding token:", {
             error,
         });
-        data = error;
-        throw new Error(error);
+        appLoggerService.warn("error while decoding token", error);
+        throw error
     }
-    return data;
 };
