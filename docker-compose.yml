@@ -64,7 +64,7 @@ services:
             - ./environment/urls.env
         depends_on: 
             - mysql
-        command: sh -c '../../wait-for mysql:3306 -t 0 -- node ./dist/app'
+        command: sh -c '../../wait-for mysql:3306 -t 900 -- node ./dist/app'
     identity:
         build: 
             context: .
