@@ -60,7 +60,9 @@ services:
     identity:
         build: 
             context: .
-            dockerfile: ./docker/service_identity.dockerfile
+            dockerfile: ./docker/backend.dockerfile
+            args:
+                SERVICE_NAME: service_identity
     posts:
         build: 
             context: .
@@ -90,10 +92,10 @@ services:
         build: 
             context: .
             dockerfile: ./docker/client.dockerfile
+            args:
+                VUE_APP_SERVER: http://api--${SQUASH_DOMAIN}
         ports: 
             - 80:80
-        environment:
-            VUE_APP_SERVER: http://api--${SQUASH_DOMAIN}
         depends_on: 
             - adminer
             - mongo-express
