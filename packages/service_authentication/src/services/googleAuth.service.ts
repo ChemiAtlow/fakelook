@@ -71,7 +71,7 @@ export const loginWithGoogleUser = async (googleUser: GoogleUser) => {
     }
 
     const refreshToken = createRefreshToken(user.get());
-    const accessToken = createAccessToken({ refreshToken });
+    const accessToken = createAccessToken(refreshToken);
 
     return { accessToken, refreshToken }
 };

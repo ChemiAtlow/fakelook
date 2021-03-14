@@ -70,7 +70,7 @@ export const loginWithFBUser = async (fbUser: FacebookUser) => {
     }
 
     const refreshToken = createRefreshToken(user.get());
-    const accessToken = createAccessToken({ refreshToken });
+    const accessToken = createAccessToken(refreshToken);
 
     return { accessToken, refreshToken }
 };

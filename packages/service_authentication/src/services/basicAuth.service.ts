@@ -95,7 +95,7 @@ export const login = async ({
         }
     );
     const refreshToken = createRefreshToken(userFromDb.get());
-    const accessToken = createAccessToken({ refreshToken });
+    const accessToken = createAccessToken(refreshToken);
     return { accessToken, refreshToken };
 };
 
