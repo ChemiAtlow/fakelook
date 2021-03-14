@@ -7,9 +7,15 @@ export const connectWithCode = async (req: Request, res: Response) => {
     if (!code) {
         throw new errors.BadRequestError("no code was provided");
     }
-    const accessToken = await facebookAuthService.exchangeCodeForAccessToken(code, origin);
+    const accessToken = await facebookAuthService.exchangeCodeForAccessToken(
+        code,
+        origin
+    );
     const userInfo = await facebookAuthService.getUserInfo(accessToken);
-    await facebookAuthService.createAuthUserFromFacebookUser(userInfo);
-    appLoggerService.info('tralala', userInfo);
-    res.status(constants.HTTPStatuses.created).send({  message: "user created successfully" });
+    const tokens = await facebookAuthService.loginWithFBUser(userInfo);
+    appLoggerService.info("Connected with facebook successfuly", {
+        userInfo,
+        tokens,
+    });
+    res.status(constants.HTTPStatuses.created).send(tokens);
 };
