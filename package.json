@@ -19,7 +19,7 @@
     },
     "private": true,
     "workspaces": [
-        "packages/*"
+        "./packages/*"
     ],
     "keywords": [
         "Fakelook",

@@ -19,7 +19,7 @@ if (token) {
             //User data is relevant, go fetch his full info.
         }
     } catch {
-        console.warn("Issue with old info!");
+        // console.warn("Issue with old info!");
     }
 }
 
