@@ -91,7 +91,7 @@ services:
             context: .
             dockerfile: ./docker/server.dockerfile
         ports: 
-            - 4000:4000
+            - 4000:80
         environment:
             SQUASH_DOMAIN: ${SQUASH_DOMAIN}
         env_file: 
