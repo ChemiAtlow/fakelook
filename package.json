@@ -18,21 +18,9 @@
         "webpack-shell-plugin-next": "2.0.4"
     },
     "private": true,
-    "workspaces": {
-        "packages": [
-            "packages/*"
-        ],
-        "nohoist": [
-            "client/**",
-            "common/**",
-            "**/@typescript-eslint/parser/**",
-            "**/typescript/**",
-            "**/braces/**",
-            "**/vue/**",
-            "**/vue*",
-            "**/vue*/**"
-        ]
-    },
+    "workspaces": [
+        "packages/*"
+    ],
     "keywords": [
         "Fakelook",
         "node",
