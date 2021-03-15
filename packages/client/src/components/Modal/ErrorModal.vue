@@ -29,7 +29,7 @@ const component = defineComponent({
     components: { BaseModal, Button, Icon },
     props: {
         close: {
-            type: Function as PropType<(value?: any) => void>,
+            type: Function as PropType<(value?: boolean) => void>,
             required: true
         },
         title: String,

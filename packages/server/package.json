@@ -10,16 +10,11 @@
         "dist"
     ],
     "scripts": {
-        "build": "tsc -b",
+        "build": "webpack",
         "test": "echo \"Error: run tests from root\" && exit 1",
-        "lint": "eslint src --ext ts",
-        "execute": "node --inspect=4000 ./dist/app",
-        "prebuild": "rimraf \"./dist\"",
-        "build:watch": "nodemon --watch src/ -e ts --exec \"npm run lint && npm run build && npm run execute\"",
-        "start:dev": "yarn run build:watch"
+        "execute": "nodemon --inspect ./dist/app.js"
     },
     "dependencies": {
-        "@fakelook/common": "^0.1.0",
         "axios": "^0.21.1",
         "body-parser": "^1.19.0",
         "compression": "^1.7.4",
@@ -42,6 +37,10 @@
         "eslint": "^7.9.0",
         "nodemon": "^2.0.4",
         "rimraf": "^3.0.2",
-        "typescript": "^4.1.5"
+        "typescript": "^4.2.2",
+        "webpack": "^5.24.1",
+        "webpack-cli": "^4.5.0",
+        "webpack-node-externals": "^2.5.2",
+        "webpack-shell-plugin-next": "2.0.4"
     }
 }

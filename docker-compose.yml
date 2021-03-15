@@ -1,4 +1,4 @@
-version: "3.8"
+version: "3.3"
 
 services:
     mysql:
@@ -13,6 +13,8 @@ services:
             MYSQL_ROOT_PASSWORD: "lalala"
         ports:
             - 3306:3306
+        expose: 
+            - "3306"
         volumes:
             - sqlData:/var/lib/mysql
         expose:
@@ -25,6 +27,8 @@ services:
             MONGO_INITDB_ROOT_PASSWORD: greps_hazak
         ports:
             - 27017:27017
+        expose: 
+            - "27017"
         volumes: 
             - mongoData:/data/db
     adminer:
@@ -34,6 +38,8 @@ services:
             ADMINER_DEFAULT_SERVER: mysql
             ADMINER_PLUGINS: 'tables-filter tinymce'
             ADMINER_DESIGN: rmsoft_blue
+        depends_on: 
+            - mysql
         ports:
             - 666:8080
     mongo-express:
@@ -44,6 +50,69 @@ services:
         environment:
             ME_CONFIG_MONGODB_ADMINUSERNAME: fakelook_user
             ME_CONFIG_MONGODB_ADMINPASSWORD: greps_hazak
+        depends_on: 
+            - mongo
+    auth:
+        build: 
+            context: .
+            dockerfile: ./docker/backend.dockerfile
+            args:
+                SERVICE_NAME: service_authentication
+                DEFAULT_PORT: 4441
+        env_file:
+            - ./environment/auth.env
+            - ./environment/urls.env
+        depends_on: 
+            - mysql
+        command: sh -c '../../wait-for mysql:3306 -t 900 -- node ./dist/app'
+    identity:
+        build: 
+            context: .
+            dockerfile: ./docker/backend.dockerfile
+            args:
+                SERVICE_NAME: service_identity
+                DEFAULT_PORT: 4443
+    posts:
+        build: 
+            context: .
+            dockerfile: ./docker/backend.dockerfile
+            args:
+                SERVICE_NAME: service_posts
+                DEFAULT_PORT: 4447
+    view:
+        build: 
+            context: .
+            dockerfile: ./docker/backend.dockerfile
+            args:
+                SERVICE_NAME: service_view
+                DEFAULT_PORT: 4445
+    server:
+        build: 
+            context: .
+            dockerfile: ./docker/server.dockerfile
+        ports: 
+            - 4000:80
+        environment:
+            SQUASH_DOMAIN: ${SQUASH_DOMAIN}
+        env_file: 
+            - ./environment/urls.env
+        depends_on: 
+            - auth
+            - identity
+            - posts
+            - view
+    client:
+        build: 
+            context: .
+            dockerfile: ./docker/client.dockerfile
+            args:
+                VUE_APP_SERVER: https://api--${SQUASH_DOMAIN}
+        ports: 
+            - 80:80
+        depends_on: 
+            - adminer
+            - mongo-express
+            - server
 
 volumes:
     sqlData:

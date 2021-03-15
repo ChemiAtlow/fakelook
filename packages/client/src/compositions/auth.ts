@@ -57,7 +57,7 @@ export const sendForm = async () => {
         password: password.value,
         email: email.value,
     };
-    console.log("Form is being sent!", formUser);
+    //console.log("Form is being sent!", formUser);
     if (isLogin.value) {
         await authService.login(formUser);
         //store jwts on local storage and cookies
@@ -149,16 +149,17 @@ export const openPopup = (url: string) => {
     // assign the previous URL
     previousUrl = url;
 };
-
-TabUtils.onBroadcastMessage<"ERR" | any>(POPUP_NAME, (payload) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+TabUtils.onBroadcastMessage<"ERR" | any>(POPUP_NAME, payload => {
     if (payload === "ERR" || !payload.jwt) {
         openModal(ErrorModal, {
             title: "Error!",
             message:
-                "We were unable to log you in to the system using a 3rd party auth provider!\nPlease try again!",
+            "We were unable to log you in to the system using a 3rd party auth provider!\nPlease try again!",
         });
     } else {
         // Got the JWT - do something
+        // eslint-disable-next-line no-console
         console.log(payload);
     }
 });

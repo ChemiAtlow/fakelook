@@ -103,7 +103,7 @@ const component = defineComponent({
                     );
                     msg = jwt;
                 } catch (err) {
-                    console.warn(err);
+                    // console.warn(err);
                     msg = "ERR";
                 }
             }

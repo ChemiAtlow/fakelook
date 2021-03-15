@@ -6,7 +6,8 @@ import morgan from "morgan";
 import { json } from "body-parser";
 import { appLoggerService } from "./services";
 // import { questionsRoutes, authRoutes, testRoutes, reportRoutes, examRoutes } from "./routes";
-import { constants, utils, middleware } from "@fakelook/common";
+import { constants, utils } from "@fakelook/common";
+import { middleware } from "@fakelook/common/src/backend";
 const { requestIdAssignMiddleware, errorMiddleware, notFoundMiddleware } = middleware;
 
 morgan.token("id", function getId(req: Request) {

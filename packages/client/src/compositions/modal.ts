@@ -1,5 +1,8 @@
-import { Component, shallowRef } from "vue";
+import { shallowRef } from "vue";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import type { Component } from "vue";
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 interface ModalInstance<T extends {} = any> {
     close: (value?: T) => void;
 }
@@ -15,10 +18,12 @@ class ModalWrapper<T extends ModalInstance> {
     }
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const modalInstances = shallowRef<ModalWrapper<any>[]>([]);
 
 export const openModal = <T extends ModalInstance>(
     Component: Component<T>,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     props: Omit<T, "close"> = {} as any
 ) => {
     const modal = new ModalWrapper<T>(Component, props);

@@ -5,7 +5,7 @@
         "lib": ["ES6"],
         "sourceMap": true,
         "outDir": "./dist",
-        "rootDir": "./src",
+        // "rootDir": "./src",
         "strict": true,
         "noImplicitAny": true,
         "noUnusedLocals": true,
@@ -14,7 +14,10 @@
         "esModuleInterop": true,
         "forceConsistentCasingInFileNames": true,
         "experimentalDecorators": true,
+        "baseUrl": ".",
+        "paths": {
+            "@fakelook/*": ["../*/src"]
+        }
     },
-    "references": [{ "path": "../common/" }],
     "exclude": ["node_modules", "dist"]
 }

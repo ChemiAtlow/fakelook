@@ -1,0 +1,26 @@
+deployments:
+  Fakelook:
+  #   filename:
+  #     ./src/CRM/docker-compose.yml
+  #   context_path:
+  #     ./src
+    vm_size:
+      2GB
+    port_forwarding:
+      80:80
+    # subdomain_port_mapping:
+    #   - adminer:666
+    #   - mongo-express:777
+    #   - api:4000
+    subdomains:
+      MongoExpress:
+        - mongo-express
+      MySQL Adminer:
+        - adminer
+      Fakelook API:
+        - api
+    ready_wait:
+      # This will tell Squash to wait up to 20 min (1200 seconds) for a
+      # success response from the app. The count down only starts after
+      # the build process is finished.
+      1200
